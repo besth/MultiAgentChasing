@@ -4,12 +4,9 @@ import itertools
 
 
 class GenerateActorCriticModel:
-    def __init__(self, numStateSpace, numActionSpace, actionLow, actionHigh, actionRatio, learningRateActor, learningRateCritic):
+    def __init__(self, numStateSpace, numActionSpace, learningRateActor, learningRateCritic):
         self.numStateSpace = numStateSpace
         self.numActionSpace = numActionSpace
-        self.actionLow = actionLow
-        self.actionHigh = actionHigh
-        self.actionRatio = actionRatio
         self.learningRateActor = learningRateActor
         self.learningRateCritic = learningRateCritic
 
@@ -19,26 +16,25 @@ class GenerateActorCriticModel:
         with actorGraph.as_default():
             with tf.name_scope("inputs"):
                 state_ = tf.placeholder(tf.float32, [None, self.numStateSpace], name="state_")
-                action_ = tf.placeholder(tf.float32, [None, self.numActionSpace], name="action_")
+                actionLabel_ = tf.placeholder(tf.int32, [None, self.numActionSpace], name="actionLabel_")
                 advantages_ = tf.placeholder(tf.float32, [None, ], name="advantages_")
 
             with tf.name_scope("hidden"):
-                fullyConnected_ = tf.layers.dense(inputs=state_, units=hiddenWidth, activation=tf.nn.relu)
+                initWeight = tf.random_uniform_initializer(-0.03, 0.03)
+                initBias = tf.constant_initializer(0.01)
+                fullyConnected_ = tf.layers.dense(inputs=state_, units=hiddenWidth, activation=tf.nn.relu, kernel_initializer = initWeight, bias_initializer = initBias)
                 for _ in range(hiddenDepth-1):
-                    fullyConnected_ = tf.layers.dense(inputs=fullyConnected_, units=hiddenWidth, activation=tf.nn.relu)
-                actionMean_ = tf.layers.dense(inputs=fullyConnected_, units=self.numActionSpace, activation=tf.nn.tanh)
-                actionVariance_ = tf.layers.dense(inputs=fullyConnected_, units=self.numActionSpace,
-                                                  activation=tf.nn.softplus)
+                    fullyConnected_ = tf.layers.dense(inputs=fullyConnected_, units=hiddenWidth, activation=tf.nn.relu, kernel_initializer = initWeight, bias_initializer = initBias)
+                allActionActivation_ = tf.layers.dense(inputs = fullyConnected_, units = self.numActionSpace, activation = None, kernel_initializer = initWeight, bias_initializer = initBias)
 
             with tf.name_scope("outputs"):
-                actionDistribution_ = tfp.distributions.MultivariateNormalDiag(actionMean_ * self.actionRatio,
-                                                                               actionVariance_ + 1e-8,
-                                                                               name='actionDistribution_')
-                actionSample_ = tf.clip_by_value(actionDistribution_.sample(), self.actionLow, self.actionHigh,
-                                                 name='actionSample_')
-                negLogProb_ = - actionDistribution_.log_prob(action_, name='negLogProb_')
-                loss_ = tf.reduce_sum(tf.multiply(negLogProb_, advantages_), name='loss_')
-            actorLossSummary = tf.summary.scalar("ActorLoss", loss_)
+                actionDistribution_ = tf.nn.softmax(allActionActivation_, name='actionDistribution_')
+                actionEntropy_ = tf.multiply(tfp.distributions.Categorical(probs=actionDistribution_).entropy(), 1,
+                                             name='actionEntropy_')
+                negLogProb_ = tf.nn.softmax_cross_entropy_with_logits_v2(logits=allActionActivation_,
+                                                                         labels=actionLabel_, name='negLogProb_')
+                loss_ = tf.reduce_mean(tf.multiply(negLogProb_, advantages_) - 0.01 * actionEntropy_, name='loss_')
+                actorLossSummary = tf.summary.scalar("ActorLoss", loss_)
 
             with tf.name_scope("train"):
                 trainOpt_ = tf.train.AdamOptimizer(self.learningRateActor, name='adamOpt_').minimize(loss_)
@@ -57,12 +53,14 @@ class GenerateActorCriticModel:
                 valueTarget_ = tf.placeholder(tf.float32, [None, 1], name="valueTarget_")
 
             with tf.name_scope("hidden"):
-                fullyConnected_ = tf.layers.dense(inputs=state_, units=hiddenWidth, activation=tf.nn.relu)
+                initWeight = tf.random_uniform_initializer(-0.03, 0.03)
+                initBias = tf.constant_initializer(0.001)
+                fullyConnected_ = tf.layers.dense(inputs=state_, units=hiddenWidth, activation=tf.nn.relu, kernel_initializer = initWeight, bias_initializer = initBias)
                 for _ in range(hiddenDepth - 1):
-                    fullyConnected_ = tf.layers.dense(inputs=fullyConnected_, units=hiddenWidth, activation=tf.nn.relu)
+                    fullyConnected_ = tf.layers.dense(inputs=fullyConnected_, units=hiddenWidth, activation=tf.nn.relu, kernel_initializer = initWeight, bias_initializer = initBias)
 
             with tf.name_scope("outputs"):
-                value_ = tf.layers.dense(inputs=fullyConnected_, units=1, activation=None, name='value_')
+                value_ = tf.layers.dense(inputs=fullyConnected_, units=1, activation=None, name='value_', kernel_initializer = initWeight, bias_initializer = initBias)
                 diff_ = tf.subtract(valueTarget_, value_, name='diff_')
                 loss_ = tf.reduce_mean(tf.square(diff_), name='loss_')
             criticLossSummary = tf.summary.scalar("CriticLoss", loss_)
