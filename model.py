@@ -14,6 +14,7 @@ class GenerateActorCriticModel:
         self.learningRateCritic = learningRateCritic
 
     def __call__(self, hiddenDepth, hiddenWidth):
+        print("Generating nn with hidden layers: {} x {} = {}".format(hiddenDepth, hiddenWidth, hiddenDepth*hiddenWidth))
         actorGraph = tf.Graph()
         with actorGraph.as_default():
             with tf.name_scope("inputs"):
@@ -56,10 +57,12 @@ class GenerateActorCriticModel:
                 valueTarget_ = tf.placeholder(tf.float32, [None, 1], name="valueTarget_")
 
             with tf.name_scope("hidden"):
-                fullyConnected1_ = tf.layers.dense(inputs=state_, units=100, activation=tf.nn.relu)
+                fullyConnected_ = tf.layers.dense(inputs=state_, units=hiddenWidth, activation=tf.nn.relu)
+                for _ in range(hiddenDepth - 1):
+                    fullyConnected_ = tf.layers.dense(inputs=fullyConnected_, units=hiddenWidth, activation=tf.nn.relu)
 
             with tf.name_scope("outputs"):
-                value_ = tf.layers.dense(inputs=fullyConnected1_, units=1, activation=None, name='value_')
+                value_ = tf.layers.dense(inputs=fullyConnected_, units=1, activation=None, name='value_')
                 diff_ = tf.subtract(valueTarget_, value_, name='diff_')
                 loss_ = tf.reduce_mean(tf.square(diff_), name='loss_')
             criticLossSummary = tf.summary.scalar("CriticLoss", loss_)
@@ -77,6 +80,13 @@ class GenerateActorCriticModel:
         return actorModel, criticModel
 
 
-def generateModelDict(generateModel, depths, widths):
-    modelDict = {(d, w): generateModel(d, w) for d, w in itertools.product(depths, widths)}
+def generateModelDictByDepthAndWidth(generateModel, hiddenDepths, hiddenWidths):
+    modelDict = {(w*d, d): generateModel(d, w) for d, w in itertools.product(hiddenDepths, hiddenWidths)}
+    print("Model Dict contains: {}".format(modelDict.keys()))
+    return modelDict
+
+
+def generateModelDictByNeuronNumberAndDepth(generateModel, hiddenNeuronNumbers, hiddenDepths):
+    modelDict = {(n, d): generateModel(d, round(n/d)) for n, d in itertools.product(hiddenNeuronNumbers, hiddenDepths)}
+    print("Model Dict contains: {}".format(modelDict.keys()))
     return modelDict
