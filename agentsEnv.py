@@ -11,7 +11,7 @@ class SheepPositionAndVelocityReset():
         startSheepPosition = self.initSheepPosition + np.random.uniform(-self.initSheepPositionNoise, self.initSheepPositionNoise)
         startSheepVelocity = self.initSheepVelocity
         checkedPosition, checkedVelocity, toWallDistance = self.checkBoundaryAndAdjust(startSheepPosition, startSheepVelocity)
-        startSheepPositionAndVelocity = np.concatenate([checkedPosition, checkedVelocity, toWallDistance])
+        startSheepPositionAndVelocity = np.concatenate([checkedPosition])
         return startSheepPositionAndVelocity
 
 class WolfPositionAndVelocityReset():
@@ -24,7 +24,7 @@ class WolfPositionAndVelocityReset():
         startWolfPosition = self.initWolfPosition + np.random.uniform(-self.initWolfPositionNoise, self.initWolfPositionNoise)
         startWolfVelocity = self.initWolfVelocity
         checkedPosition, checkedVelocity, toWallDistance = self.checkBoundaryAndAdjust(startWolfPosition, startWolfVelocity)
-        startWolfPositionAndVelocity = np.concatenate([checkedPosition, checkedVelocity, toWallDistance])
+        startWolfPositionAndVelocity = np.concatenate([checkedPosition])
         return startWolfPositionAndVelocity
 
 class SheepPositionAndVelocityTransation():
@@ -38,7 +38,7 @@ class SheepPositionAndVelocityTransation():
     def __call__(self, oldAllAgentState, sheepId, sheepAction, timeStep):
         oldSheepState = oldAllAgentState[self.numOneAgentState * sheepId : self.numOneAgentState * (sheepId + 1)]
         oldSheepPosition = oldSheepState[min(self.positionIndex) : max(self.positionIndex) + 1]
-        oldSheepVelocity = oldSheepState[min(self.velocityIndex) : max(self.velocityIndex) + 1]
+        #oldSheepVelocity = oldSheepState[min(self.velocityIndex) : max(self.velocityIndex) + 1]
      
         if timeStep % self.sheepActionFrequency == 0:
             newSheepVelocity = sheepAction
@@ -47,7 +47,7 @@ class SheepPositionAndVelocityTransation():
 
         newSheepPosition = oldSheepPosition + newSheepVelocity
         checkedPosition, checkedVelocity, toWallDistance = self.checkBoundaryAndAdjust(newSheepPosition, newSheepVelocity)
-        sheepPositionAndVelocity = np.concatenate([checkedPosition, checkedVelocity, toWallDistance])
+        sheepPositionAndVelocity = np.concatenate([checkedPosition])
         return sheepPositionAndVelocity
 
 class WolfPositionAndVelocityTransation():
@@ -61,7 +61,7 @@ class WolfPositionAndVelocityTransation():
     def __call__(self, oldAllAgentState, sheepId, wolfId, wolfSubtlety, timeStep):
         oldWolfState = oldAllAgentState[self.numOneAgentState * wolfId : self.numOneAgentState * (wolfId + 1)]
         oldWolfPosition = oldWolfState[min(self.positionIndex) : max(self.positionIndex) + 1]
-        oldWolfVelocity = oldWolfState[min(self.velocityIndex) : max(self.velocityIndex) + 1]
+        #oldWolfVelocity = oldWolfState[min(self.velocityIndex) : max(self.velocityIndex) + 1]
         
         
         if timeStep % self.wolfActionFrequency == 0:
@@ -78,7 +78,7 @@ class WolfPositionAndVelocityTransation():
         newWolfPosition = oldWolfPosition + newWolfVelocity
         
         checkedPosition, checkedVelocity, toWallDistance = self.checkBoundaryAndAdjust(newWolfPosition, newWolfVelocity)
-        wolfPositionAndVelocity = np.concatenate([checkedPosition, checkedVelocity, toWallDistance])
+        wolfPositionAndVelocity = np.concatenate([checkedPosition])
 
         return wolfPositionAndVelocity
 

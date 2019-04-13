@@ -56,8 +56,7 @@ class AccumulateReward():
         return accumulatedRewards
 
 class TrainCriticMonteCarloTensorflow():
-    def __init__(self, criticWriter, accumulateReward):
-        self.criticWriter = criticWriter
+    def __init__(self, accumulateReward):
         self.accumulateReward = accumulateReward
     def __call__(self, episode, rewardsEpisode, criticModel):
         mergedEpisode = np.concatenate(episode)
@@ -76,12 +75,10 @@ class TrainCriticMonteCarloTensorflow():
         loss, trainOpt = criticModel.run([loss_, trainOpt_], feed_dict = {state_ : stateBatch,
                                                                           valueTarget_ : valueTargetBatch
                                                                           })
-        self.criticWriter.flush()
         return loss, criticModel
 
 class TrainCriticBootstrapTensorflow():
-    def __init__(self, criticWriter, decay):
-        self.criticWriter = criticWriter
+    def __init__(self, decay):
         self.decay = decay
     def __call__(self, episode, rewardsEpisode, criticModel):
         noLastStateEpisode = [trajectory[ : -1] for trajectory in episode]
@@ -112,7 +109,6 @@ class TrainCriticBootstrapTensorflow():
         loss, trainOpt = criticModel.run([loss_, trainOpt_], feed_dict = {state_ : stateBatch,
                                                                           valueTarget_ : valueTargetBatch
                                                                           })
-        self.criticWriter.flush()
         return loss, criticModel
 
 def approximateValue(stateBatch, criticModel):
@@ -182,9 +178,7 @@ class OfflineAdvantageActorCritic():
             critic = lambda state: approximateValue(state, criticModel)
             advantages = estimateAdvantage(episode, rewardsEpisode, critic)
             policyLoss, actorModel = trainActor(episode, advantages, actorModel)
-            print(policyLoss)
-            print(np.mean([len(episode[index]) for index in range(self.numTrajectory)]))
-            if episodeIndex % 1 == 0:
+            if episodeIndex % 1 == -1:
                 for timeStep in episode[-1]:
                     self.render(timeStep[0])
         return actorModel, criticModel
