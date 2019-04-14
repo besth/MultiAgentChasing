@@ -41,14 +41,14 @@ def draw(data):
 			plt.xlabel('Layer')
 			plt.ylabel('Value%s' % i)
 			plt.legend(loc='upper left')
-			plt.xticks(np.arange(0, max(layerList), step=1))
-			plt.yticks(np.arange(0, 100, step=5))
+			# plt.xticks(np.arange(0, max(layerList), step=1))
 			title = makeTitle('Value%s'%i, 'Layer')
+			plt.title(title)
 			plt.savefig(title)
 
 
 if __name__ == '__main__':
-	data = {(200,2): [10, 20], (200,4): [20,30], (200,8): [30,40], (200,16):[40,50],
+	data = {(200,2): [10, -20], (200,4): [20,30], (200,8): [30,40], (200,16):[40,50],
 			(400,2): [15,25], (400,4): [25,35], (400,8): [35,45], (400,16): [45,55],
 			(800,2): [18,28], (800,4): [28,38], (800,8): [38,48], (800,16): [48,58],
 			(1000,2): [22,32], (1000,4): [32,42], (1000,8): [42,52], (1000,16): [52,62]}
