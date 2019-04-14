@@ -176,7 +176,7 @@ class OfflineAdvantageActorCritic():
             critic = lambda state: approximateValue(state, criticModel)
             advantages = estimateAdvantage(episode, rewardsEpisode, critic)
             policyLoss, actorModel = trainActor(episode, advantages, actorModel)
-            if episodeIndex % 1 == 0:
+            if episodeIndex % 1 == -1:
                 for timeStep in episode[-1]:
                     self.render(timeStep[0])
         return actorModel, criticModel
