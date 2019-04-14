@@ -3,7 +3,6 @@ import numpy as np
 import functools as ft
 import env
 import reward
-import dataSave 
 import tensorflow_probability as tfp
 import random
 import agentsEnv as ag
@@ -135,10 +134,9 @@ class EstimateAdvantageMonteCarlo():
         return advantages
 
 class TrainActorMonteCarloTensorflow():
-    def __init__(self, actionSpace, actorWriter):
+    def __init__(self, actionSpace):
         self.actionSpace = actionSpace
         self.numActionSpace = len(actionSpace)
-        self.actorWriter = actorWriter
     def __call__(self, episode, advantages, actorModel):
         mergedEpisode = np.concatenate(episode)
         numBatch = len(mergedEpisode)
@@ -158,7 +156,6 @@ class TrainActorMonteCarloTensorflow():
                                                                          actionLabel_ : actionLabelBatch,
                                                                          advantages_ : advantages            
                                                                          })
-        self.actorWriter.flush()
         return loss, actorModel
 
 class OfflineAdvantageActorCritic():
@@ -170,6 +167,7 @@ class OfflineAdvantageActorCritic():
     def __call__(self, actorModel, criticModel, approximatePolicy, sampleTrajectories, rewardFunctions, trainCritic, approximateValue, estimateAdvantage, trainActor):
         numConditions = len(sampleTrajectories)
         for episodeIndex in range(self.maxEpisode):
+            print("Training episode", episodeIndex)
             conditionIndexes = np.random.choice(range(numConditions), self.numTrajectory)
             actor = lambda state: approximatePolicy(state, actorModel)
             episode = [sampleTrajectories[conditionIndex](actor) for conditionIndex in conditionIndexes]
@@ -178,7 +176,7 @@ class OfflineAdvantageActorCritic():
             critic = lambda state: approximateValue(state, criticModel)
             advantages = estimateAdvantage(episode, rewardsEpisode, critic)
             policyLoss, actorModel = trainActor(episode, advantages, actorModel)
-            if episodeIndex % 1 == -1:
+            if episodeIndex % 1 == 0:
                 for timeStep in episode[-1]:
                     self.render(timeStep[0])
         return actorModel, criticModel
@@ -235,7 +233,6 @@ def main():
         actorSummary = tf.summary.merge_all()
         actorSaver = tf.train.Saver(tf.global_variables())
 
-    actorWriter = tf.summary.FileWriter('tensorBoard/actorOfflineA2C', graph = actorGraph)
     actorModel = tf.Session(graph = actorGraph)
     actorModel.run(actorInit)    
     

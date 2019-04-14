@@ -2,7 +2,6 @@ import numpy as np
 import scipy as sp
 import math
 import AnalyticGeometryFunctions as ag
-import pandas as pd
 
 class GenerateNextFramePosition():
     def __init__(self, numAgent, wolf, chasingSubtletyForWolfVelocityDirection, wolfVelocityValue, checkBoundaryAndAdjustPosition): 

@@ -8,8 +8,14 @@ import random
 import agentsEnv as ag
 import itertools as it
 import pygame as pg
+
+
+# Local import
 import offlineA2CMonteCarloAdvantageDiscrete as A2CMC
-from pydoc import locate
+from model import GenerateActorCriticModel
+from evaluate import Evaluate
+from visualize import draw
+
 
 
 def main():
@@ -28,8 +34,8 @@ def main():
     initWolfPosition = np.array([180, 180])
     initSheepVelocity = np.array([0, 0])
     initWolfVelocity = np.array([0, 0])
-    initSheepPositionNoise = np.array([119, 119])
-    initWolfPositionNoise = np.array([59, 59])
+    initSheepPositionNoise = np.array([150, 150])
+    initWolfPositionNoise = np.array([60, 60])
     sheepPositionAndVelocityReset = ag.SheepPositionAndVelocityReset(initSheepPosition, initSheepVelocity, initSheepPositionNoise, checkBoundaryAndAdjust)
     wolfPositionAndVelocityReset = ag.WolfPositionAndVelocityReset(initWolfPosition, initWolfVelocity, initWolfPositionNoise, checkBoundaryAndAdjust)
     
@@ -38,8 +44,8 @@ def main():
     velocityIndex = [2, 3]
     sheepVelocitySpeed = 10
     sheepActionFrequency = 1
-    wolfVelocitySpeed = 6
-    wolfActionFrequency = 12
+    wolfVelocitySpeed = 0
+    wolfActionFrequency = 1
     sheepPositionAndVelocityTransation = ag.SheepPositionAndVelocityTransation(sheepVelocitySpeed, sheepActionFrequency, 
             numOneAgentState, positionIndex, velocityIndex, checkBoundaryAndAdjust) 
     wolfPositionAndVelocityTransation = ag.WolfPositionAndVelocityTransation(wolfVelocitySpeed, wolfActionFrequency,
@@ -78,37 +84,46 @@ def main():
     rewardDecay = 0.99
     rewardFunctions = [reward.RewardFunctionTerminalPenalty(agentIds, sheepIndexOfId, wolfIndexOfId, numOneAgentState, positionIndex,
         aliveBouns, deathPenalty, isTerminal) for agentIds, isTerminal in zip(possibleAgentIds, isTerminals)] 
-    accumulateReward = AccumulateReward(rewardDecay)
+    accumulateReward = A2CMC.AccumulateReward(rewardDecay)
     
     maxTimeStep = 150
     sampleTrajectories = [A2CMC.SampleTrajectory(maxTimeStep, transitionFunction, isTerminal) for transitionFunction, isTerminal in zip(transitionFunctions, isTerminals)]
 
     approximatePolicy = A2CMC.ApproximatePolicy(actionSpace)
+    approximateValue = A2CMC.approximateValue
     trainCritic = A2CMC.TrainCriticMonteCarloTensorflow(accumulateReward) 
     #trainCritic = TrainCriticBootstrapTensorflow(rewardDecay) 
     estimateAdvantage = A2CMC.EstimateAdvantageMonteCarlo(accumulateReward) 
     trainActor = A2CMC.TrainActorMonteCarloTensorflow(actionSpace) 
     
-    numTrajectory = 100
-    maxEpisode = 100000
-    modelTrain = OfflineAdvantageActorCritic(numTrajectory, maxEpisode, render)
+    numTrajectory = 1
+    maxEpisode = 2
 
-    # Load algorithm class
-    algorithm_name = "PolicyGradient"
-    algorithm_class = locate("algorithms.{}.{}".format(algorithm_name, algorithm_name))
-    algorithm = algorithm_class((numAgent,
-                                 maxEpisode, 
-                                 maxTimeStep,  
-                                 transitionFunction, 
-                                 isTerminal, 
-                                 reset,  
-                                 saveRate))
+    # Generate models.
+    learningRateActor = 1e-4
+    learningRateCritic = 1e-4
+    # hiddenNeuronNumbers = [128, 256, 512, 1024]
+    # hiddenDepths = [2, 4, 8]
+    hiddenNeuronNumbers = [128]
+    hiddenDepths = [2]
+    generateModel = GenerateActorCriticModel(numStateSpace, numActionSpace, learningRateActor, learningRateCritic)
+    modelDict = {(n, d): generateModel(d, round(n/d)) for n, d in it.product(hiddenNeuronNumbers, hiddenDepths)}
 
-    trained_models = algorithm(models)
+    print("Generated graphs")
+    # Train.
+    actorCritic = A2CMC.OfflineAdvantageActorCritic(numTrajectory, maxEpisode, render)
+    modelTrain = lambda  actorModel, criticModel: actorCritic(actorModel, criticModel, approximatePolicy, sampleTrajectories, rewardFunctions, trainCritic,
+            approximateValue, estimateAdvantage, trainActor)
+    trainedModelDict = {key: modelTrain(model[0], model[1]) for key, model in modelDict.items()}
 
-    # Evaluate models 
+    print("Finished training")
+    # Evaluate
+    modelEvaluate = Evaluate(numTrajectory, approximatePolicy, sampleTrajectories[0], accumulateReward, rewardFunctions[0])
+    meanEpisodeRewards = {key: modelEvaluate(model[0], model[1]) for key, model in trainedModelDict.items()}
 
-    print("Success.")
+    print("Finished evaluating")
+    # Visualize
+    draw(meanEpisodeRewards)
 
 if __name__ == "__main__":
     main()
