@@ -29,11 +29,10 @@ class GenerateActorCriticModel:
 
             with tf.name_scope("outputs"):
                 actionDistribution_ = tf.nn.softmax(allActionActivation_, name='actionDistribution_')
-                actionEntropy_ = tf.multiply(tfp.distributions.Categorical(probs=actionDistribution_).entropy(), 1,
-                                             name='actionEntropy_')
+                #actionEntropy_ = tf.multiply(tfp.distributions.Categorical(probs=actionDistribution_).entropy(), 1, name='actionEntropy_')
                 negLogProb_ = tf.nn.softmax_cross_entropy_with_logits_v2(logits=allActionActivation_,
                                                                          labels=actionLabel_, name='negLogProb_')
-                loss_ = tf.reduce_mean(tf.multiply(negLogProb_, advantages_) - 0.01 * actionEntropy_, name='loss_')
+                loss_ = tf.reduce_mean(tf.multiply(negLogProb_, advantages_), name='loss_')
                 actorLossSummary = tf.summary.scalar("ActorLoss", loss_)
 
             with tf.name_scope("train"):

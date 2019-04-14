@@ -96,16 +96,14 @@ def main():
     estimateAdvantage = A2CMC.EstimateAdvantageMonteCarlo(accumulateReward) 
     trainActor = A2CMC.TrainActorMonteCarloTensorflow(actionSpace) 
     
-    numTrajectory = 2
-    maxEpisode = 2
+    numTrajectory = 100
+    maxEpisode = 5000
 
     # Generate models.
     learningRateActor = 1e-4
     learningRateCritic = 1e-4
-    # hiddenNeuronNumbers = [128, 256, 512, 1024]
-    # hiddenDepths = [2, 4, 8]
-    hiddenNeuronNumbers = [128]
-    hiddenDepths = [2,4]
+    hiddenNeuronNumbers = [128, 256, 512, 1024]
+    hiddenDepths = [2, 4, 8]
     generateModel = GenerateActorCriticModel(numStateSpace, numActionSpace, learningRateActor, learningRateCritic)
     modelDict = {(n, d): generateModel(d, round(n/d)) for n, d in it.product(hiddenNeuronNumbers, hiddenDepths)}
 
