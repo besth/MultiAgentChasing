@@ -34,42 +34,23 @@ def main():
     initWolfPosition = np.array([180, 180])
     initSheepVelocity = np.array([0, 0])
     initWolfVelocity = np.array([0, 0])
-    initSheepPositionNoise = np.array([150, 150])
+    initSheepPositionNoise = np.array([120, 120])
     initWolfPositionNoise = np.array([60, 60])
-    sheepPositionAndVelocityReset = ag.SheepPositionAndVelocityReset(initSheepPosition, initSheepVelocity, initSheepPositionNoise, checkBoundaryAndAdjust)
-    wolfPositionAndVelocityReset = ag.WolfPositionAndVelocityReset(initWolfPosition, initWolfVelocity, initWolfPositionNoise, checkBoundaryAndAdjust)
+    sheepPositionReset = ag.SheepPositionReset(initSheepPosition, initSheepPositionNoise, checkBoundaryAndAdjust)
+    wolfPositionReset = ag.WolfPositionReset(initWolfPosition, initWolfPositionNoise, checkBoundaryAndAdjust)
     
     numOneAgentState = 2
     positionIndex = [0, 1]
-    velocityIndex = [2, 3]
-    sheepVelocitySpeed = 10
-    sheepActionFrequency = 1
-    wolfVelocitySpeed = 0
-    wolfActionFrequency = 1
-    sheepPositionAndVelocityTransation = ag.SheepPositionAndVelocityTransation(sheepVelocitySpeed, sheepActionFrequency, 
-            numOneAgentState, positionIndex, velocityIndex, checkBoundaryAndAdjust) 
-    wolfPositionAndVelocityTransation = ag.WolfPositionAndVelocityTransation(wolfVelocitySpeed, wolfActionFrequency,
-            numOneAgentState, positionIndex, velocityIndex, checkBoundaryAndAdjust) 
+
+    sheepPositionTransition = ag.SheepPositionTransition(numOneAgentState, positionIndex, checkBoundaryAndAdjust) 
+    wolfPositionTransition = ag.WolfPositionTransition(numOneAgentState, positionIndex, checkBoundaryAndAdjust) 
     
     numAgent = 2
-    sheepIndexOfId = 0
-    wolfIndexOfId = 1
-    originAgentId = list(range(numAgent))
-    #fixedId for sheep
-    fixedIds= list(range(0, 1))
-    #unfixedId for wolf and distractors
-    unfixedIds = list(range(1, numAgent))
-    possibleUnfixedIds = it.permutations(unfixedIds)
-    possibleAgentIds = [fixedIds + list(unfixedIds) for unfixedIds in possibleUnfixedIds]
-    possibleWolfSubtleties = [50]
-    conditions = it.product(possibleAgentIds, possibleWolfSubtleties)
-    transitionFunctions = [env.TransitionFunction(agentIds, sheepIndexOfId, wolfIndexOfId, wolfSubtlety, 
-        sheepPositionAndVelocityReset, wolfPositionAndVelocityReset, sheepPositionAndVelocityTransation, wolfPositionAndVelocityTransation) 
-        for agentIds, wolfSubtlety in conditions]
-    
+    sheepId = 0
+    wolfId = 1
+    transitionFunction = env.TransitionFunction(sheepId, wolfId, sheepPositionReset, wolfPositionReset, sheepPositionTransition, wolfPositionTransition)
     minDistance = 15
-    isTerminals = [env.IsTerminal(agentIds, sheepIndexOfId, wolfIndexOfId, numOneAgentState, positionIndex, 
-        minDistance) for agentIds in possibleAgentIds]
+    isTerminal = env.IsTerminal(sheepId, wolfId, numOneAgentState, positionIndex, minDistance) 
      
     screen = pg.display.set_mode([xBoundary[1], yBoundary[1]])
     screenColor = [255,255,255]
@@ -82,26 +63,25 @@ def main():
     aliveBouns = -1
     deathPenalty = 20
     rewardDecay = 0.99
-    rewardFunctions = [reward.RewardFunctionTerminalPenalty(agentIds, sheepIndexOfId, wolfIndexOfId, numOneAgentState, positionIndex,
-        aliveBouns, deathPenalty, isTerminal) for agentIds, isTerminal in zip(possibleAgentIds, isTerminals)] 
-    accumulateReward = A2CMC.AccumulateReward(rewardDecay)
+    rewardFunction = reward.RewardFunctionTerminalPenalty(sheepId, wolfId, numOneAgentState, positionIndex, aliveBouns, deathPenalty, isTerminal) 
+    accumulateReward = A2CMC.AccumulateReward(rewardDecay, rewardFunction)
     
     maxTimeStep = 150
-    sampleTrajectories = [A2CMC.SampleTrajectory(maxTimeStep, transitionFunction, isTerminal) for transitionFunction, isTerminal in zip(transitionFunctions, isTerminals)]
+    sampleTrajectory = A2CMC.SampleTrajectory(maxTimeStep, transitionFunction, isTerminal) 
 
     approximatePolicy = A2CMC.ApproximatePolicy(actionSpace)
     approximateValue = A2CMC.approximateValue
     trainCritic = A2CMC.TrainCriticMonteCarloTensorflow(accumulateReward) 
-    #trainCritic = TrainCriticBootstrapTensorflow(rewardDecay) 
     estimateAdvantage = A2CMC.EstimateAdvantageMonteCarlo(accumulateReward) 
     trainActor = A2CMC.TrainActorMonteCarloTensorflow(actionSpace) 
     
-    numTrajectory = 100
-    maxEpisode = 5000
+    numTrajectory = 5
+    maxEpisode = 1
+    actorCritic = A2CMC.OfflineAdvantageActorCritic(numTrajectory, maxEpisode, render)
 
     # Generate models.
     learningRateActor = 1e-4
-    learningRateCritic = 1e-4
+    learningRateCritic = 3e-4
     hiddenNeuronNumbers = [128, 256, 512, 1024]
     hiddenDepths = [2, 4, 8]
     generateModel = GenerateActorCriticModel(numStateSpace, numActionSpace, learningRateActor, learningRateCritic)
@@ -110,18 +90,19 @@ def main():
     print("Generated graphs")
     # Train.
     actorCritic = A2CMC.OfflineAdvantageActorCritic(numTrajectory, maxEpisode, render)
-    modelTrain = lambda  actorModel, criticModel: actorCritic(actorModel, criticModel, approximatePolicy, sampleTrajectories, rewardFunctions, trainCritic,
+    modelTrain = lambda  actorModel, criticModel: actorCritic(actorModel, criticModel, approximatePolicy, sampleTrajectory, trainCritic,
             approximateValue, estimateAdvantage, trainActor)
     trainedModelDict = {key: modelTrain(model[0], model[1]) for key, model in modelDict.items()}
 
     print("Finished training")
     # Evaluate
-    modelEvaluate = Evaluate(numTrajectory, approximatePolicy, sampleTrajectories[0], rewardFunctions[0])
+    modelEvaluate = Evaluate(numTrajectory, approximatePolicy, sampleTrajectory, rewardFunction)
     meanEpisodeRewards = {key: modelEvaluate(model[0], model[1]) for key, model in trainedModelDict.items()}
 
     print("Finished evaluating")
     # Visualize
-    draw(meanEpisodeRewards)
+    independentVariableNames = ['NeuroTotalNumber', 'layerNumber']
+    draw(meanEpisodeRewards, independentVariableNames)
 
 if __name__ == "__main__":
     main()

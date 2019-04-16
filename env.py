@@ -1,40 +1,34 @@
 import os
 import numpy as np
+import pandas as pd
 import pygame as pg
 import itertools as it
 import random 
 #np.random.seed(123)
 
 class TransitionFunction():
-    def __init__(self, agentIds, sheepIndexOfId, wolfIndexOfId, wolfSubtlety, sheepPositionAndVelocityReset, wolfPositionAndVelocityReset, sheepPositionAndVelocityTransation, wolfPositionAndVelocityTransation):
-        self.agentIds = agentIds
-        self.sheepId = self.agentIds[sheepIndexOfId]
-        self.wolfId = self.agentIds[wolfIndexOfId] 
-        self.wolfSubtlety = wolfSubtlety 
-        self.sheepPositionAndVelocityReset = sheepPositionAndVelocityReset
-        self.wolfPositionAndVelocityReset = wolfPositionAndVelocityReset
-        self.sheepPositionAndVelocityTransation = sheepPositionAndVelocityTransation
-        self.wolfPositionAndVelocityTransation = wolfPositionAndVelocityTransation
+    def __init__(self, sheepId, wolfId, sheepPositionReset, wolfPositionReset, sheepPositionTransition, wolfPositionTransition):
+        self.sheepId = sheepId
+        self.wolfId = wolfId
+        self.sheepPositionReset = sheepPositionReset
+        self.wolfPositionReset = wolfPositionReset
+        self.sheepPositionTransition = sheepPositionTransition
+        self.wolfPositionTransition = wolfPositionTransition
 
     def __call__(self, oldState, action):
         if oldState is None:
-            sheepPositionAndVelocity = self.sheepPositionAndVelocityReset()
-            wolfPositionAndVelocity = self.wolfPositionAndVelocityReset()
-            self.timeStep = -1 
+            sheepPosition = self.sheepPositionReset()
+            wolfPosition = self.wolfPositionReset()
         else:
-            sheepPositionAndVelocity = self.sheepPositionAndVelocityTransation(oldState, self.sheepId, action, self.timeStep) 
-            wolfPositionAndVelocity = self.wolfPositionAndVelocityTransation(oldState, self.sheepId, self.wolfId, self.wolfSubtlety, self.timeStep)
-        fixedOrderNewState = np.array([sheepPositionAndVelocity, wolfPositionAndVelocity])
-        orderFollowIdNewState = fixedOrderNewState[self.agentIds]
-        newState = np.concatenate(orderFollowIdNewState)
-        self.timeStep = self.timeStep + 1
+            sheepPosition = self.sheepPositionTransition(oldState, self.sheepId, action)
+            wolfPosition = self.wolfPositionTransition(oldState, self.wolfId)
+        newState = np.concatenate([sheepPosition, wolfPosition])
         return newState
 
 class IsTerminal():
-    def __init__(self, agentIds, sheepIndexOfId, wolfIndexOfId, numOneAgentState, positionIndex, minDistance):
-        self.agentIds = agentIds
-        self.sheepId = self.agentIds[sheepIndexOfId]
-        self.wolfId = self.agentIds[wolfIndexOfId] 
+    def __init__(self, sheepId, wolfId, numOneAgentState, positionIndex, minDistance):
+        self.sheepId = sheepId
+        self.wolfId = wolfId
         self.numOneAgentState = numOneAgentState 
         self.positionIndex = positionIndex
         self.minDistance = minDistance
@@ -73,10 +67,12 @@ class Render():
             pg.display.flip()
             currentDir = os.getcwd()
             parentDir = os.path.abspath(os.path.join(currentDir, os.pardir))
-            saveImageDir=parentDir+'/data/'+self.saveImageFile
+            saveImageDir=parentDir+'/chasing/data/'+self.saveImageFile
             if self.saveImage==True:
                 filenameList = os.listdir(saveImageDir)
                 pg.image.save(self.screen,saveImageDir+'/'+str(len(filenameList))+'.png')
-            pg.time.wait(17)
+            pg.time.wait(1)
 
-
+if __name__ == '__main__':
+    a = TransitionFunction
+    __import__('ipdb').set_trace()

@@ -2,10 +2,9 @@ import numpy as np
 # import env
 
 class RewardFunctionTerminalPenalty():
-    def __init__(self, agentIds, sheepIndexOfId, wolfIndexOfId, numOneAgentState, positionIndex, aliveBouns, deathPenalty, isTerminal):
-        self.agentIds = agentIds
-        self.sheepId = self.agentIds[sheepIndexOfId]
-        self.wolfId = self.agentIds[wolfIndexOfId] 
+    def __init__(self, sheepId, wolfId, numOneAgentState, positionIndex, aliveBouns, deathPenalty, isTerminal):
+        self.sheepId = sheepId
+        self.wolfId = wolfId 
         self.numOneAgentState = numOneAgentState 
         self.positionIndex = positionIndex
         self.aliveBouns = aliveBouns
@@ -21,4 +20,3 @@ class RewardFunctionTerminalPenalty():
         if self.isTerminal(state):
             reward = reward + self.deathPenalty
         return reward
-
