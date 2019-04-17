@@ -3,15 +3,14 @@ import tensorflow_probability as tfp
 import itertools
 
 
-class GenerateActorCriticModel:
-    def __init__(self, numStateSpace, numActionSpace, learningRateActor, learningRateCritic):
+class GenerateActorModel:
+    def __init__(self, numStateSpace, numActionSpace, learningRateActor):
         self.numStateSpace = numStateSpace
         self.numActionSpace = numActionSpace
         self.learningRateActor = learningRateActor
-        self.learningRateCritic = learningRateCritic
 
     def __call__(self, hiddenDepth, hiddenWidth):
-        print("Generating nn with hidden layers: {} x {} = {}".format(hiddenDepth, hiddenWidth, hiddenDepth*hiddenWidth))
+        print("Generating Actor model with hidden layers: {} x {} = {}".format(hiddenDepth, hiddenWidth, hiddenDepth*hiddenWidth))
         actorGraph = tf.Graph()
         with actorGraph.as_default():
             with tf.name_scope("inputs"):
@@ -45,6 +44,16 @@ class GenerateActorCriticModel:
         actorModel = tf.Session(graph=actorGraph)
         actorModel.run(actorInit)
 
+        return actorModel
+
+
+class GenerateCriticModel:
+    def __init__(self, numStateSpace, learningRateCritic):
+        self.numStateSpace = numStateSpace
+        self.learningRateCritic = learningRateCritic
+
+    def __call__(self, hiddenDepth, hiddenWidth):
+        print("Generating Critic model with hidden layers: {} x {} = {}".format(hiddenDepth, hiddenWidth, hiddenDepth*hiddenWidth))
         criticGraph = tf.Graph()
         with criticGraph.as_default():
             with tf.name_scope("inputs"):
@@ -74,7 +83,46 @@ class GenerateActorCriticModel:
         criticModel = tf.Session(graph=criticGraph)
         criticModel.run(criticInit)
 
-        return actorModel, criticModel
+        return criticModel
+
+
+class GeneratePolicyNet:
+    def __init__(self, numStateSpace, numActionSpace, learningRate):
+        self.numStateSpace = numStateSpace
+        self.numActionSpace = numActionSpace
+        self.learningRate = learningRate
+
+    def __call__(self, hiddenDepth, hiddenWidth):
+        print("Generating Policy Net with hidden layers: {} x {} = {}".format(hiddenDepth, hiddenWidth, hiddenDepth * hiddenWidth))
+        with tf.name_scope("inputs"):
+            state_ = tf.placeholder(tf.float32, [None, self.numStateSpace], name="state_")
+            actionLabel_ = tf.placeholder(tf.int32, [None, self.numActionSpace], name="actionLabel_")
+            accumulatedRewards_ = tf.placeholder(tf.float32, [None, ], name="accumulatedRewards_")
+
+        with tf.name_scope("hidden"):
+            initWeight = tf.random_uniform_initializer(-0.03, 0.03)
+            initBias = tf.constant_initializer(0.001)
+            fullyConnected_ = tf.layers.dense(inputs=state_, units=hiddenWidth, activation=tf.nn.relu, kernel_initializer = initWeight, bias_initializer = initBias)
+            for _ in range(hiddenDepth-1):
+                fullyConnected_ = tf.layers.dense(inputs=fullyConnected_, units=self.numActionSpace, activation=tf.nn.relu, kernel_initializer = initWeight, bias_initializer = initBias)
+            allActionActivation_ = tf.layers.dense(inputs=fullyConnected_, units=self.numActionSpace, activation=None, kernel_initializer = initWeight, bias_initializer = initBias)
+
+        with tf.name_scope("outputs"):
+            actionDistribution_ = tf.nn.softmax(allActionActivation_, name='actionDistribution_')
+            negLogProb_ = tf.nn.softmax_cross_entropy_with_logits_v2(logits=allActionActivation_, labels=actionLabel_,
+                                                                     name='negLogProb_')
+            loss_ = tf.reduce_sum(tf.multiply(negLogProb_, accumulatedRewards_), name='loss_')
+        tf.summary.scalar("Loss", loss_)
+
+        with tf.name_scope("train"):
+            trainOpt_ = tf.train.AdamOptimizer(learningRate, name='adamOpt_').minimize(loss_)
+
+        mergedSummary = tf.summary.merge_all()
+
+        model = tf.Session()
+        model.run(tf.global_variables_initializer())
+
+        return model
 
 
 def generateModelDictByDepthAndWidth(generateModel, hiddenDepths, hiddenWidths):
