@@ -6,11 +6,11 @@ class Evaluate:
         self.sampleTrajectory = sampleTrajectory
         self.rewardFunction = rewardFunction
 
-    def __call__(self, actor_model, critic_model):
+    def __call__(self, actor_model):
         # actor_model, critic_model = model
 
-        actor = lambda state: self.approximatePolicy(state, actor_model)
-        trajectories = [self.sampleTrajectory(actor) for _ in range(self.num_trajectories)]
+        policy = lambda state: self.approximatePolicy(state, actor_model)
+        trajectories = [self.sampleTrajectory(policy) for _ in range(self.num_trajectories)]
         episode_rewards = [np.sum([self.rewardFunction(state, action) for state, action in trajectory]) for trajectory in trajectories]
         benchmark = [np.mean(episode_rewards)]
 

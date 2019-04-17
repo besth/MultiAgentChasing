@@ -115,7 +115,7 @@ class GeneratePolicyNet:
         tf.summary.scalar("Loss", loss_)
 
         with tf.name_scope("train"):
-            trainOpt_ = tf.train.AdamOptimizer(learningRate, name='adamOpt_').minimize(loss_)
+            trainOpt_ = tf.train.AdamOptimizer(self.learningRate, name='adamOpt_').minimize(loss_)
 
         mergedSummary = tf.summary.merge_all()
 

@@ -1,7 +1,7 @@
 import numpy as np
 # import env
 
-class RewardFunctionTerminalPenalty():
+class TerminalPenalty():
     def __init__(self, sheepId, wolfId, numOneAgentState, positionIndex, aliveBouns, deathPenalty, isTerminal):
         self.sheepId = sheepId
         self.wolfId = wolfId 
