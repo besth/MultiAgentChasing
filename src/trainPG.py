@@ -68,8 +68,8 @@ def main():
     approximatePolicy = PG.ApproximatePolicy(actionSpace)
     trainPG = PG.TrainTensorflow(actionSpace)
 
-    numTrajectory = 5
-    maxEpisode = 10
+    numTrajectory = 20
+    maxEpisode = 1000
 
     # Generate models.
     learningRate = 1e-4
@@ -99,6 +99,7 @@ def main():
     # Visualize
     independentVariableNames = ['NeuroTotalNumber', 'layerNumber']
     draw(meanEpisodeRewards, independentVariableNames)
+    print("Finished visualizing", meanEpisodeRewards)
 
 if __name__ == "__main__":
     main()

@@ -11,7 +11,7 @@ class ApproximatePolicy():
         state_ = graph.get_tensor_by_name('inputs/state_:0')
         actionDistribution_ = graph.get_tensor_by_name('outputs/actionDistribution_:0')
         actionDistributionBatch = model.run(actionDistribution_, feed_dict = {state_ : stateBatch})
-        print(actionDistributionBatch)
+        # print(actionDistributionBatch)
         actionIndexBatch = [np.random.choice(range(self.numActionSpace), p = actionDistribution) for actionDistribution in actionDistributionBatch]
         actionBatch = np.array([self.actionSpace[actionIndex] for actionIndex in actionIndexBatch])
         return actionBatch
@@ -52,7 +52,10 @@ class AccumulateRewards():
         return accumulatedRewards
 
 def normalize(accumulatedRewards):
-    normalizedAccumulatedRewards = (accumulatedRewards - np.mean(accumulatedRewards)) / np.std(accumulatedRewards)
+    if np.std(accumulatedRewards) != 0:
+        normalizedAccumulatedRewards = (accumulatedRewards - np.mean(accumulatedRewards)) / np.std(accumulatedRewards)
+    else:
+        return accumulatedRewards
     return normalizedAccumulatedRewards
 
 class TrainTensorflow():
@@ -90,6 +93,7 @@ class PolicyGradient():
 
     def __call__(self, model, approximatePolicy, sampleTrajectory, accumulateRewards, train):
         for episodeIndex in range(self.maxEpisode):
+            print("Training episode", episodeIndex)
             policy = lambda state: approximatePolicy(state, model)
             episode = [sampleTrajectory(policy) for index in range(self.numTrajectory)]
             normalizedAccumulatedRewardsEpisode = [normalize(accumulateRewards(trajectory)) for trajectory in episode]
