@@ -108,4 +108,7 @@ venv.bak/
 /plots
 *.mp4
 
+#
+.idea
+
 
