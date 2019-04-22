@@ -18,8 +18,7 @@ def calculate_score(exploration_rate, parent_visit_count, self_visit_count, mean
 
 
 class SelectChild:
-    def __init__(self, transition_func, exploration_rate):
-        self.transition_func = transition_func
+    def __init__(self, exploration_rate):
         self.exploration_rate = exploration_rate
 
     def __call__(self, curr_node):
@@ -29,27 +28,25 @@ class SelectChild:
         action = np.argmax(action_scores)
         child = get_child_node(curr_node, action)
 
-        curr_state = list(curr_node.id.values())[0]
-        next_state = self.transition_func(curr_state, action)
-
-        return child, action, next_state
+        return child
 
 
 class Expand:
-    def __init__(self, num_actions):
+    def __init__(self, num_actions, transition_func):
         self.num_actions = num_actions
+        self.transition_func = transition_func
 
-    def __call__(self, node_to_expand, action, state):
-        if action is None or state is None:
+    def __call__(self, node_to_expand, action, prev_state):
+        if action is None or prev_state is None:
             print("Action or state is None. Unable to expand.")
             exit()
 
-        node_to_expand.id = {action: state}
         node_to_expand.is_expanded = True
 
         # Create empty children for each action
         for action_index in range(self.num_actions):
-            Node(parent=node_to_expand, id={action_index: None}, num_visited=1, sum_value=0,
+            next_state = self.transition_func(prev_state, action)
+            Node(parent=node_to_expand, id={action_index: next_state}, num_visited=1, sum_value=0,
                  action_prior=1 / self.num_actions, is_expanded=False)
 
         return node_to_expand
@@ -99,8 +96,9 @@ class MCTS:
             node_list = list()
 
             # Placeholders for action and next_state
-            action, next_state = None, None
+            action, prev_state = None, None
             while curr_node.is_expanded:
+                prev_state = list(curr_node.id.values())[0]
                 next_node, action, next_state = self.select_child(curr_node)
 
                 # node list does not include current root
@@ -108,7 +106,7 @@ class MCTS:
 
                 curr_node = next_node
 
-            curr_node = self.expand(curr_node, action, next_state)
+            curr_node = self.expand(curr_node, action, prev_state)
             value = self.rollout(curr_node)
             self.backup(value, node_list)
 
@@ -117,15 +115,16 @@ def main():
     num_action_space = 2
     default_action_prior = 1 / num_action_space
 
-    state = [[1, 1], [2, 2]]
-    root = Node(id={1: state}, num_visited=1, sum_value=0, action_prior=default_action_prior, is_expanded=True)
-    level1_1 = Node(parent=root, id={0: state}, num_visited=2, sum_value=5, action_prior=default_action_prior, is_expanded=False)
-    level1_2 = Node(parent=root, id={1: state}, num_visited=3, sum_value=10, action_prior=default_action_prior, is_expanded=False)
+    # TODO: make sure in initial state, all the children of root are properly initialized with transition function.
+    init_state = [[1, 1], [2, 2]]
+    root = Node(id={1: init_state}, num_visited=1, sum_value=0, action_prior=default_action_prior, is_expanded=True)
+    level1_1 = Node(parent=root, id={0: init_state}, num_visited=2, sum_value=5, action_prior=default_action_prior, is_expanded=False)
+    level1_2 = Node(parent=root, id={1: init_state}, num_visited=3, sum_value=10, action_prior=default_action_prior, is_expanded=False)
     #
-    level2_1 = Node(parent=level1_1, id={0: state}, num_visited=1, sum_value=3, action_prior=default_action_prior,
-                    is_expanded=False)
-    level2_2 = Node(parent=level1_1, id={1: state}, num_visited=1, sum_value=5, action_prior=default_action_prior,
-                    is_expanded=False)
+    # level2_1 = Node(parent=level1_1, id={0: state}, num_visited=1, sum_value=3, action_prior=default_action_prior,
+    #                 is_expanded=False)
+    # level2_2 = Node(parent=level1_1, id={1: state}, num_visited=1, sum_value=5, action_prior=default_action_prior,
+    #                 is_expanded=False)
     # root.id = {2: [1, 2]}
     print(RenderTree(root))
 
