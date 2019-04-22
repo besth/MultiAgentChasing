@@ -36,20 +36,21 @@ class Expand:
         self.num_actions = num_actions
         self.transition_func = transition_func
 
-    def __call__(self, node_to_expand, action, prev_state):
-        if action is None or prev_state is None:
-            print("Action or state is None. Unable to expand.")
-            exit()
+    def __call__(self, leaf_node):
+        # if action is None or prev_state is None:
+        #     print("Action or state is None. Unable to expand.")
+        #     exit()
 
-        node_to_expand.is_expanded = True
+        leaf_node.is_expanded = True
+        curr_state = list(leaf_node.id.values())[0]
 
         # Create empty children for each action
         for action_index in range(self.num_actions):
-            next_state = self.transition_func(prev_state, action)
-            Node(parent=node_to_expand, id={action_index: next_state}, num_visited=1, sum_value=0,
+            next_state = self.transition_func(curr_state, action_index)
+            Node(parent=leaf_node, id={action_index: next_state}, num_visited=1, sum_value=0,
                  action_prior=1 / self.num_actions, is_expanded=False)
 
-        return node_to_expand
+        return leaf_node
 
 
 class RollOut:
@@ -96,9 +97,8 @@ class MCTS:
             node_list = list()
 
             # Placeholders for action and next_state
-            action, prev_state = None, None
             while curr_node.is_expanded:
-                prev_state = list(curr_node.id.values())[0]
+                # prev_state = list(curr_node.id.values())[0]
                 next_node, action, next_state = self.select_child(curr_node)
 
                 # node list does not include current root
@@ -106,8 +106,8 @@ class MCTS:
 
                 curr_node = next_node
 
-            curr_node = self.expand(curr_node, action, prev_state)
-            value = self.rollout(curr_node)
+            leaf_node = self.expand(curr_node)
+            value = self.rollout(leaf_node)
             self.backup(value, node_list)
 
 
