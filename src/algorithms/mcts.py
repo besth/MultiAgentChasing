@@ -96,9 +96,7 @@ class MCTS:
         for explore_step in range(self.exploration_batch_size):
             node_list = list()
 
-            # Placeholders for action and next_state
             while curr_node.is_expanded:
-                # prev_state = list(curr_node.id.values())[0]
                 next_node, action, next_state = self.select_child(curr_node)
 
                 # node list does not include current root
