@@ -6,7 +6,7 @@ from algorithms.mcts import calculate_score, SelectChild, Expand, RollOut, backu
 from simple1DEnv import TransitionFunction, RewardFunction
 
 
-
+@ddt
 class TestMCTS(unittest.TestCase):
     def setUp(self):
         # Env param
@@ -36,7 +36,9 @@ class TestMCTS(unittest.TestCase):
 
         self.expand = Expand(self.num_action_space, self.transition)
 
-    def testCalculateScore(self):
+    @data()
+    @unpack
+    def testCalculateScore(self, exploration_rate, parent_visit_number, self_visit_number, sum_value, action_prior, true_score):
         exploration_rate = 1.0
         parent_visit_number = 2
         self_visit_number = 1
@@ -47,7 +49,9 @@ class TestMCTS(unittest.TestCase):
         gt_score = np.sqrt(2) / 4 + 3
         self.assertEqual(score, gt_score)
 
-    def testSelectChild(self):
+    @data()
+    @unpack
+    def testSelectChild(self, firstChildVisited, firstChildSumValue, secondChildVisited, secondChildSumValue):
         child = self.selectChild(self.root)
         child_id_action = list(child.id.keys())[0]
         gt_score_0 = 5 / 2 + 1.0 * 0.5 * 1 / (1 + 2)

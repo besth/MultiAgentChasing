@@ -7,7 +7,7 @@ from anytree import RenderTree
 def get_child_node(curr_node, action):
     return anytree.search.find(curr_node, lambda node: list(node.id.keys())[0] == action and node.parent == curr_node)
 
-
+# original ucb score
 def calculate_score(exploration_rate, parent_visit_count, self_visit_count, mean_value, action_prior):
     q_score = mean_value
     exploration_score = action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count)
@@ -16,7 +16,7 @@ def calculate_score(exploration_rate, parent_visit_count, self_visit_count, mean
 
     return score
 
-
+# distinct action/action_index
 class SelectChild:
     def __init__(self, exploration_rate):
         self.exploration_rate = exploration_rate
@@ -31,6 +31,7 @@ class SelectChild:
         return child
 
 
+# use action
 class Expand:
     def __init__(self, num_actions, transition_func):
         self.num_actions = num_actions
