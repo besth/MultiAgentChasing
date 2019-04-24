@@ -76,6 +76,8 @@ class TestMCTS(unittest.TestCase):
         child_1_cal_state = list(child_1.id.values())[0]
         self.assertEqual(child_1_cal_state, 3)
 
+    def testRollout(self):
+        pass
 
 
 

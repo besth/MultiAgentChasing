@@ -4,9 +4,13 @@ from anytree import AnyNode as Node
 from anytree import RenderTree
 
 
-def get_child_node(curr_node, action):
-    return anytree.search.find(curr_node, lambda node: list(node.id.keys())[0] == action and node.parent == curr_node)
+# def get_child_node(curr_node, action):
+#     return anytree.search.find(curr_node, lambda node: list(node.id.keys())[0] == action and node.parent == curr_node)
 
+# def get_child_node(curr_node, selected_child_index):
+#     for child_index, child in enumerate(curr_node.children):
+#         if child_index == selected_child_index:
+#             return child
 
 class CalculateScore:
     def __init__(self, c_init, c_base):
@@ -33,15 +37,16 @@ class SelectChild:
         action_scores = [self.calculate_score(curr_node.num_visited, child.num_visited,
                                          child.sum_value / child.num_visited, child.action_prior) for child in curr_node.children]
         selected_child_index = np.argmax(action_scores)
-        child = get_child_node(curr_node, selected_child_index)
+        # child = get_child_node(curr_node, selected_child_index)
+        child = curr_node.children[selected_child_index]
 
         return child
 
 
 # use action
 class Expand:
-    def __init__(self, num_actions, transition_func):
-        self.num_actions = num_actions
+    def __init__(self, action_space, transition_func):
+        self.action_space = action_space
         self.transition_func = transition_func
 
     def __call__(self, leaf_node):
@@ -49,10 +54,10 @@ class Expand:
         curr_state = list(leaf_node.id.values())[0]
 
         # Create empty children for each action
-        for action in range(self.num_actions):
+        for action in self.action_space:
             next_state = self.transition_func(curr_state, action)
             Node(parent=leaf_node, id={action: next_state}, num_visited=1, sum_value=0,
-                 action_prior=1 / self.num_actions, is_expanded=False)
+                 action_prior=1 / len(self.action_space), is_expanded=False)
 
         return leaf_node
 
@@ -128,7 +133,7 @@ def main():
     # level2_2 = Node(parent=level1_1, id={1: state}, num_visited=1, sum_value=5, action_prior=default_action_prior,
     #                 is_expanded=False)
     # root.id = {2: [1, 2]}
-    print(RenderTree(root))
+    print(root.children, root.children[0])
 
     # # Test calculate score
     # parent_visit_number = 1
