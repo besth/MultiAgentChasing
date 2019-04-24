@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from ddt import ddt, data, unpack
 from anytree import AnyNode as Node
-from algorithms.mcts import calculate_score, SelectChild, Expand, RollOut, backup
+from algorithms.mcts import CalculateScore, SelectChild, Expand, RollOut, backup
 from simple1DEnv import TransitionFunction, RewardFunction
 
 
@@ -20,10 +20,9 @@ class TestMCTS(unittest.TestCase):
 
         self.reward = RewardFunction(step_penalty, catch_reward, target_state)
 
-        self.num_action_space = 2
-        self.exploration_rate = 1.0
-        self.selectChild = SelectChild(self.exploration_rate)
-        self.default_action_prior = 1 / self.num_action_space
+        self.c_init = 1
+        self.c_base = 0
+        self.calculateScore = CalculateScore(self.c_init, self.c_base)
 
         init_state = 3
         level1_0_state = self.transition(init_state, action=0)
@@ -36,15 +35,10 @@ class TestMCTS(unittest.TestCase):
 
         self.expand = Expand(self.num_action_space, self.transition)
 
-    @data()
+    @data((0, 0, 0, 1, 0), (1, 0, 0, 1, np.log(2)), (1, 1, 0, 1, np  
     @unpack
-    def testCalculateScore(self, exploration_rate, parent_visit_number, self_visit_number, sum_value, action_prior, true_score):
-        exploration_rate = 1.0
-        parent_visit_number = 2
-        self_visit_number = 1
-        mean_value = 3 / self_visit_number
-        action_prior = 0.5
-
+    def testCalculateScore(self, parent_visit_number, self_visit_number, sum_value, action_prior, true_score):
+        curr_node = 
         score = calculate_score(exploration_rate, parent_visit_number, self_visit_number, mean_value, action_prior)
         gt_score = np.sqrt(2) / 4 + 3
         self.assertEqual(score, gt_score)

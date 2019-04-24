@@ -17,14 +17,17 @@ class CalculateScore:
         self.c_init = c_init
         self.c_base = c_base
     
-    def __call__(self, parent_visit_count, self_visit_count, mean_value, action_prior):
-        # calculate c: exploration rate
-        exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_init)
-        
-        q_score = mean_value
-        u_score = action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count)
+    def __call__(self, curr_node, child):
+        parent_visit_count = curr_node.num_visited
+        self_visit_count = child.num_visited
+        mean_value = child.sum_value / self_visit_count
+        action_prior = child.action_prior
 
-        score = q_score + exploration_rate * u_score
+        exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_init)
+        u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
+        q_score = mean_value
+
+        score = q_score + u_score
         return score
 
 
@@ -33,31 +36,34 @@ class SelectChild:
         self.calculate_score = calculate_score
 
     def __call__(self, curr_node):
-        # calculate score for next node selection
-        action_scores = [self.calculate_score(curr_node.num_visited, child.num_visited,
-                                         child.sum_value / child.num_visited, child.action_prior) for child in curr_node.children]
-        selected_child_index = np.argmax(action_scores)
-        # child = get_child_node(curr_node, selected_child_index)
+        scores = [self.calculate_score(curr_node, child) for child in curr_node.children]
+        selected_child_index = np.argmax(scores)
         child = curr_node.children[selected_child_index]
-
         return child
 
+class ActionPriorFunction:
+    def __init__(self, action_space):
+        self.action_space = action_space
+        
+    def __call__(self, curr_state):
+        action_prior = {action: 1/len(self.action_space) for action in self.action_space}
+        return action_prior 
 
 # use action
 class Expand:
-    def __init__(self, action_space, transition_func):
-        self.action_space = action_space
+    def __init__(self, action_prior_func, transition_func):
+        self.action_prior_func = action_prior_func
         self.transition_func = transition_func
 
     def __call__(self, leaf_node):
         leaf_node.is_expanded = True
         curr_state = list(leaf_node.id.values())[0]
-
+        action_prior_distribution = self.action_prior_func(curr_state)
         # Create empty children for each action
-        for action in self.action_space:
+        for action, prior in action_prior_distribution.iteritems():
             next_state = self.transition_func(curr_state, action)
             Node(parent=leaf_node, id={action: next_state}, num_visited=1, sum_value=0,
-                 action_prior=1 / len(self.action_space), is_expanded=False)
+                 action_prior=prior, is_expanded=False)
 
         return leaf_node
 
@@ -70,17 +76,16 @@ class RollOut:
         self.rollout_policy = rollout_policy
         self.is_terminal = is_terminal
 
-    def __call__(self, curr_node):
-        curr_state = list(curr_node.id.values())[0]
+    def __call__(self, leaf_node):
+        curr_state = list(leaf_node.id.values())[0]
         sum_reward = 0
         for rollout_step in range(self.max_rollout_step):
-            action = self.rollout_policy(curr_state)
-            next_state = self.transition_func(curr_state, action)
-
             sum_reward += self.reward_func(curr_state, action)
             if self.is_terminal(curr_state):
-                return sum_reward
+                rollout_step = self.max_rollout_step
 
+            action = self.rollout_policy(curr_state)
+            next_state = self.transition_func(curr_state, action)
             curr_state = next_state
 
         return sum_reward
