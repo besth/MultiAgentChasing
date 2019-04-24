@@ -38,10 +38,10 @@ class TestReward(unittest.TestCase):
 
         self.reward = RewardFunction(self.step_penalty, self.catch_reward, self.isTerminal)
 
-    @data ((3,1,4,-1), (6,1,7,1))
+    @data ((3,1,-1), (6,1,1))
     @unpack
-    def testRewardDDT(self, state, action, next_state, reward):
-        cal_reward = self.reward(state, action, next_state)
+    def testRewardDDT(self, state, action, reward):
+        cal_reward = self.reward(state, action)
         self.assertEqual(cal_reward, reward)
 
 

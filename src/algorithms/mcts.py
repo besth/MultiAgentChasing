@@ -23,7 +23,7 @@ class CalculateScore:
         mean_value = child.sum_value / self_visit_count
         action_prior = child.action_prior
 
-        exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_init)
+        exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_base) + self.c_init
         u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
         q_score = mean_value
 
@@ -51,19 +51,21 @@ class ActionPriorFunction:
 
 # use action
 class Expand:
-    def __init__(self, action_prior_func, transition_func):
+    def __init__(self, action_prior_func, transition_func, is_terminal):
         self.action_prior_func = action_prior_func
         self.transition_func = transition_func
+        self.is_terminal = is_terminal
 
     def __call__(self, leaf_node):
-        leaf_node.is_expanded = True
         curr_state = list(leaf_node.id.values())[0]
-        action_prior_distribution = self.action_prior_func(curr_state)
-        # Create empty children for each action
-        for action, prior in action_prior_distribution.iteritems():
-            next_state = self.transition_func(curr_state, action)
-            Node(parent=leaf_node, id={action: next_state}, num_visited=1, sum_value=0,
-                 action_prior=prior, is_expanded=False)
+        if not self.is_terminal(curr_state):
+            leaf_node.is_expanded = True
+            action_prior_distribution = self.action_prior_func(curr_state)
+            # Create empty children for each action
+            for action, prior in action_prior_distribution.iteritems():
+                next_state = self.transition_func(curr_state, action)
+                Node(parent=leaf_node, id={action: next_state}, num_visited=1, sum_value=0,
+                    action_prior=prior, is_expanded=False)
 
         return leaf_node
 
@@ -80,11 +82,11 @@ class RollOut:
         curr_state = list(leaf_node.id.values())[0]
         sum_reward = 0
         for rollout_step in range(self.max_rollout_step):
+            action = self.rollout_policy(curr_state)
             sum_reward += self.reward_func(curr_state, action)
             if self.is_terminal(curr_state):
-                rollout_step = self.max_rollout_step
+                break
 
-            action = self.rollout_policy(curr_state)
             next_state = self.transition_func(curr_state, action)
             curr_state = next_state
 

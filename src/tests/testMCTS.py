@@ -38,7 +38,7 @@ class TestMCTS(unittest.TestCase):
     @data((0, 0, 0, 1, 0), (1, 0, 0, 1, np.log(2)), (1, 1, 0, 1, np  
     @unpack
     def testCalculateScore(self, parent_visit_number, self_visit_number, sum_value, action_prior, true_score):
-        curr_node = 
+        # curr_node = 
         score = calculate_score(exploration_rate, parent_visit_number, self_visit_number, mean_value, action_prior)
         gt_score = np.sqrt(2) / 4 + 3
         self.assertEqual(score, gt_score)

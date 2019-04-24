@@ -3,11 +3,7 @@ class TransitionFunction:
         self.bound_high = bound_high
         self.bound_low = bound_low
     def __call__(self, state, action):
-        if action == 0:
-            new_state = state - 1
-        else:
-            new_state = state + 1
-
+        new_state = state + action
         if new_state < self.bound_low or new_state > self.bound_high:
             new_state = state
         
@@ -26,8 +22,8 @@ class RewardFunction:
         self.catch_reward = catch_reward
         self.isTerminal = isTerminal
 
-    def __call__(self, state, action, next_state):
-        if self.isTerminal(next_state):
+    def __call__(self, state, action):
+        if self.isTerminal(state):
             return self.catch_reward
         else:
             return self.step_penalty
