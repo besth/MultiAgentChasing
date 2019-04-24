@@ -7,26 +7,33 @@ from anytree import RenderTree
 def get_child_node(curr_node, action):
     return anytree.search.find(curr_node, lambda node: list(node.id.keys())[0] == action and node.parent == curr_node)
 
-# original ucb score
-def calculate_score(exploration_rate, parent_visit_count, self_visit_count, mean_value, action_prior):
-    q_score = mean_value
-    exploration_score = action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count)
 
-    score = q_score + exploration_rate * exploration_score
+class CalculateScore:
+    def __init__(self, c_init, c_base):
+        self.c_init = c_init
+        self.c_base = c_base
+    
+    def __call__(self, parent_visit_count, self_visit_count, mean_value, action_prior):
+        # calculate c: exploration rate
+        exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_init)
+        
+        q_score = mean_value
+        u_score = action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count)
 
-    return score
+        score = q_score + exploration_rate * u_score
+        return score
 
-# distinct action/action_index
+
 class SelectChild:
-    def __init__(self, exploration_rate):
-        self.exploration_rate = exploration_rate
+    def __init__(self, calculate_score):
+        self.calculate_score = calculate_score
 
     def __call__(self, curr_node):
         # calculate score for next node selection
-        action_scores = [calculate_score(self.exploration_rate, curr_node.num_visited, child.num_visited,
+        action_scores = [self.calculate_score(curr_node.num_visited, child.num_visited,
                                          child.sum_value / child.num_visited, child.action_prior) for child in curr_node.children]
-        action = np.argmax(action_scores)
-        child = get_child_node(curr_node, action)
+        selected_child_index = np.argmax(action_scores)
+        child = get_child_node(curr_node, selected_child_index)
 
         return child
 
@@ -38,17 +45,13 @@ class Expand:
         self.transition_func = transition_func
 
     def __call__(self, leaf_node):
-        # if action is None or prev_state is None:
-        #     print("Action or state is None. Unable to expand.")
-        #     exit()
-
         leaf_node.is_expanded = True
         curr_state = list(leaf_node.id.values())[0]
 
         # Create empty children for each action
-        for action_index in range(self.num_actions):
-            next_state = self.transition_func(curr_state, action_index)
-            Node(parent=leaf_node, id={action_index: next_state}, num_visited=1, sum_value=0,
+        for action in range(self.num_actions):
+            next_state = self.transition_func(curr_state, action)
+            Node(parent=leaf_node, id={action: next_state}, num_visited=1, sum_value=0,
                  action_prior=1 / self.num_actions, is_expanded=False)
 
         return leaf_node
