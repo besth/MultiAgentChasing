@@ -81,14 +81,14 @@ class TestMCTS(unittest.TestCase):
             old_child_id = new_child.id
     
     @unittest.skip  
-    def testExpand(self):
+    @data(())
+    @unpack
+    def testExpand(self, ):
         # test whether children have been created with the correct values.
         curr_node = self.level1_0
-
         new_curr_node = self.expand(self.level1_0)
 
         children = new_curr_node.children
-
         child_0 = children[0]
         child_1 = children[1]
         child_0_cal_state = list(child_0.id.values())[0]
@@ -115,17 +115,11 @@ class TestMCTS(unittest.TestCase):
         rollout = RollOut(rollout_policy, max_rollout_step, self.transition, reward_func, isTerminal)
         stored_reward = []
         for curr_iter in range(max_iteration):
-            # print(curr_iter, rollout(leaf_node))
             stored_reward.append(rollout(leaf_node))
         
         calc_sum_value = np.mean(stored_reward)
-        # print(stored_reward)
+
         self.assertAlmostEqual(gt_sum_value, calc_sum_value, places=1)
-
-
-
-        # init_state = self.rollout_init_state
-
 
 
 if __name__ == "__main__":
