@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 import unittest
 from ddt import ddt, data, unpack
 from simple1DEnv import TransitionFunction, RewardFunction, Terminal
@@ -9,7 +11,7 @@ class TestTransition(unittest.TestCase):
         self.bound_high = 7
         self.transition = TransitionFunction(self.bound_low, self.bound_high)
 
-    @data ((0, 1, 1), (3, 0, 2), (0, 0, 0), (7, 1, 7))
+    @data ((0, 1, 1), (3, -1, 2), (0, -1, 0), (7, 1, 7))
     @unpack
     def testTransitionDDT(self, state, action, next_state):
         # transition = TransitionFunction(self.bound_low, self.bound_high)
@@ -38,7 +40,7 @@ class TestReward(unittest.TestCase):
 
         self.reward = RewardFunction(self.step_penalty, self.catch_reward, self.isTerminal)
 
-    @data ((3,1,-1), (6,1,1))
+    @data ((3,1,-1), (7,1,1))
     @unpack
     def testRewardDDT(self, state, action, reward):
         cal_reward = self.reward(state, action)

@@ -21,13 +21,10 @@ class TestMCTS(unittest.TestCase):
         self.num_action_space = len(self.action_space)
         self.action_prior_func = ActionPriorFunction(self.action_space)
 
-
         step_penalty = -1
         catch_reward = 1
         self.target_state = bound_high
         self.isTerminal = Terminal(self.target_state)
-
-        # self.reward = RewardFunction(step_penalty, catch_reward, self.target_state)
 
         self.c_init = 0
         self.c_base = 1
@@ -37,7 +34,6 @@ class TestMCTS(unittest.TestCase):
         
         init_state = 3
         level1_0_state = self.transition(init_state, action=0)
-        # print("level 1 state", level1_0_state)
         level1_1_state = self.transition(init_state, action=1)
         self.default_action_prior = 0.5
 
@@ -54,7 +50,6 @@ class TestMCTS(unittest.TestCase):
         child = Node(num_visited = self_visit_number, sum_value = sum_value, action_prior = action_prior)
         score = self.calculateScore(curr_node, child)
         self.assertEqual(score, groundtruth_score)
-
 
     @data((1, 1, 1, 1, 100))
     @unpack
