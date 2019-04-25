@@ -62,7 +62,7 @@ def main():
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transition, reward, isTerminal)
 
     # Hyper-parameters
-    numSimulations = 100
+    numSimulations = 10000
     maxRunningSteps = 200
 
     # MCTS algorithm
@@ -75,7 +75,7 @@ def main():
     runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal)
 
     # testing
-    numTestingIterations = 1000
+    numTestingIterations = 10
     episodeLengths = []
     # currState = initState
     for step in range(numTestingIterations):

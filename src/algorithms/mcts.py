@@ -19,7 +19,7 @@ class CalculateScore:
         u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
         q_score = mean_value
 
-        score = q_score + u_score
+        score = q_score*0 + u_score
         return score
 
 
@@ -149,9 +149,8 @@ class MCTS:
             leaf_node = self.expand(curr_node)
             value = self.rollout(leaf_node)
             self.backup(value, node_path)
-        
+        #print(curr_root.children)  
         next_root = self.select_next_root(curr_root)
-        # print(RenderTree(next_root))
         return next_root
 
 def main():
