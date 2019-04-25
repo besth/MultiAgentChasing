@@ -3,15 +3,6 @@ import anytree
 from anytree import AnyNode as Node
 from anytree import RenderTree
 
-
-# def get_child_node(curr_node, action):
-#     return anytree.search.find(curr_node, lambda node: list(node.id.keys())[0] == action and node.parent == curr_node)
-
-# def get_child_node(curr_node, selected_child_index):
-#     for child_index, child in enumerate(curr_node.children):
-#         if child_index == selected_child_index:
-#             return child
-
 class CalculateScore:
     def __init__(self, c_init, c_base):
         self.c_init = c_init
@@ -101,8 +92,8 @@ def backup(value, node_list):
 
 
 class MCTS:
-    def __init__(self, exploration_batch_size, select_child, expand, rollout, backup):
-        self.exploration_batch_size = exploration_batch_size
+    def __init__(self, num_simulation, selectChild, expand, rollout, backup):
+        self.num_simulation = num_simulation
         self.select_child = select_child
         self.expand = expand
         self.rollout = rollout
@@ -110,11 +101,11 @@ class MCTS:
 
     def __call__(self, curr_root):
         curr_node = curr_root
-        for explore_step in range(self.exploration_batch_size):
+        for explore_step in range(self.num_simulation):
             node_list = list()
 
             while curr_node.is_expanded:
-                next_node, action, next_state = self.select_child(curr_node)
+                next_node = self.select_child(curr_node)
 
                 # node list does not include current root
                 node_list.append(next_node)
