@@ -31,6 +31,8 @@ class TestMCTS(unittest.TestCase):
         self.c_base = 1
         self.calculateScore = CalculateScore(self.c_init, self.c_base)
 
+        self.selectChild = SelectChild(self.calculateScore)
+        
         init_state = 3
         level1_0_state = self.transition(init_state, action=0)
         # print("level 1 state", level1_0_state)
@@ -43,7 +45,7 @@ class TestMCTS(unittest.TestCase):
 
         self.expand = Expand(self.num_action_space, self.transition, self.isTerminal)
 
-    @data((0, 1, 0, 1, 0))
+    @data((0, 1, 0, 1, 0), (1, 1, 0, 1, np.log(3)/2), (1, 1, 1, 1, 1 + np.log(3)/2))
     @unpack
     def testCalculateScore(self, parent_visit_number, self_visit_number, sum_value, action_prior, groundtruth_score):
         curr_node = Node(num_visited = parent_visit_number)
@@ -52,18 +54,32 @@ class TestMCTS(unittest.TestCase):
         self.assertEqual(score, groundtruth_score)
 
 
-    @unittest.skip  
-    @data()
+    @data((1, 1, 1, 1, 100))
     @unpack
-    def testSelectChild(self, firstChildVisited, firstChildSumValue, secondChildVisited, secondChildSumValue):
-        child = self.selectChild(self.root)
-        child_id_action = list(child.id.keys())[0]
-        gt_score_0 = 5 / 2 + 1.0 * 0.5 * 1 / (1 + 2)
-        gt_score_1 = 10 / 3 + 1.0 * 0.5 * 1 / (1 + 3)
-        gt_action = np.argmax([gt_score_0, gt_score_1])
+    def testVisitNumEffectsOnSelectChild(self, firstChildVisited, firstChildSumValue, secondChildVisited, secondChildSumValue, maxSelectTimes):
+        curr_node = Node(num_visited = 0)
+        first_child = Node(parent = curr_node, id = 'first', num_visited = firstChildVisited, sum_value = firstChildSumValue, action_prior = 0.5, is_expanded = False)
+        second_child = Node(parent = curr_node, id = 'second', num_visited = secondChildVisited, sum_value = secondChildSumValue, action_prior = 0.5, is_expanded = False)
+        old_child_id = 'none'
+        for selectIndex in range(maxSelectTimes):
+            new_child = self.selectChild(curr_node)
+            self.assertTrue(new_child.id != old_child_id)
+            new_child.sum_value -= 1
+            old_child_id = new_child.id
 
-        self.assertEqual(gt_action, child_id_action)
-       
+    @data((1, 1, 1, 1, 100))
+    @unpack
+    def testVisitValueEffectsOnSelectChild(self, firstChildVisited, firstChildSumValue, secondChildVisited, secondChildSumValue, maxSelectTimes):
+        curr_node = Node(num_visited = 1)
+        first_child = Node(parent = curr_node, id = 'first', num_visited = firstChildVisited, sum_value = firstChildSumValue, action_prior = 0.5, is_expanded = False)
+        second_child = Node(parent = curr_node, id = 'second', num_visited = secondChildVisited, sum_value = secondChildSumValue, action_prior = 0.5, is_expanded = False)
+        old_child_id = 'none'
+        for selectIndex in range(maxSelectTimes):
+            new_child = self.selectChild(curr_node)
+            self.assertTrue(new_child.id != old_child_id)
+            new_child.num_visited += 1
+            old_child_id = new_child.id
+    
     @unittest.skip  
     def testExpand(self):
         # test whether children have been created with the correct values.
@@ -82,11 +98,10 @@ class TestMCTS(unittest.TestCase):
         self.assertEqual(child_1_cal_state, 3)
 
 
-    @unittest.skip 
     @data((4, 3, 0.125), (3, 4, 0.25))
     @unpack
     def testRollout(self, max_rollout_step, init_state, gt_sum_value):
-        max_iteration = 100000
+        max_iteration = 10000
 
         target_state = 6
         isTerminal = Terminal(target_state)
@@ -105,7 +120,7 @@ class TestMCTS(unittest.TestCase):
         
         calc_sum_value = np.mean(stored_reward)
         # print(stored_reward)
-        self.assertAlmostEqual(gt_sum_value, calc_sum_value, places=2)
+        self.assertAlmostEqual(gt_sum_value, calc_sum_value, places=1)
 
 
 
