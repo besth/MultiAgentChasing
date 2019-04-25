@@ -24,8 +24,8 @@ class TestMCTS(unittest.TestCase):
 
         # self.reward = RewardFunction(step_penalty, catch_reward, self.target_state)
 
-        self.c_init = 1
-        self.c_base = 0
+        self.c_init = 0
+        self.c_base = 1
         self.calculateScore = CalculateScore(self.c_init, self.c_base)
 
         init_state = 3
@@ -40,41 +40,45 @@ class TestMCTS(unittest.TestCase):
 
         self.expand = Expand(self.num_action_space, self.transition, self.isTerminal)
 
-    # @data((0, 0, 0, 1, 0), (1, 0, 0, 1, np.log(2)), (1, 1, 0, 1)  )
-    # @unpack
-    # def testCalculateScore(self, parent_visit_number, self_visit_number, sum_value, action_prior, true_score):
-    #     # curr_node = 
-    #     score = calculate_score(exploration_rate, parent_visit_number, self_visit_number, mean_value, action_prior)
-    #     gt_score = np.sqrt(2) / 4 + 3
-    #     self.assertEqual(score, gt_score)
+    @data((0, 1, 0, 1, 0))
+    @unpack
+    def testCalculateScore(self, parent_visit_number, self_visit_number, sum_value, action_prior, groundtruth_score):
+        curr_node = Node(num_visited = parent_visit_number)
+        child = Node(num_visited = self_visit_number, sum_value = sum_value, action_prior = action_prior)
+        score = calculate_score(curr_node, child)
+        self.assertEqual(score, groundtruth_score)
 
-    # @data()
-    # @unpack
-    # def testSelectChild(self, firstChildVisited, firstChildSumValue, secondChildVisited, secondChildSumValue):
-    #     child = self.selectChild(self.root)
-    #     child_id_action = list(child.id.keys())[0]
-    #     gt_score_0 = 5 / 2 + 1.0 * 0.5 * 1 / (1 + 2)
-    #     gt_score_1 = 10 / 3 + 1.0 * 0.5 * 1 / (1 + 3)
-    #     gt_action = np.argmax([gt_score_0, gt_score_1])
 
-    #     self.assertEqual(gt_action, child_id_action)
+    @unittest.skip()  
+    @data()
+    @unpack
+    def testSelectChild(self, firstChildVisited, firstChildSumValue, secondChildVisited, secondChildSumValue):
+        child = self.selectChild(self.root)
+        child_id_action = list(child.id.keys())[0]
+        gt_score_0 = 5 / 2 + 1.0 * 0.5 * 1 / (1 + 2)
+        gt_score_1 = 10 / 3 + 1.0 * 0.5 * 1 / (1 + 3)
+        gt_action = np.argmax([gt_score_0, gt_score_1])
 
-    # def testExpand(self):
-    #     # test whether children have been created with the correct values.
-    #     curr_node = self.level1_0
+        self.assertEqual(gt_action, child_id_action)
+       
+    @unittest.skip()  
+    def testExpand(self):
+        # test whether children have been created with the correct values.
+        curr_node = self.level1_0
 
-    #     new_curr_node = self.expand(self.level1_0)
+        new_curr_node = self.expand(self.level1_0)
 
-    #     children = new_curr_node.children
+        children = new_curr_node.children
 
-    #     child_0 = children[0]
-    #     child_1 = children[1]
-    #     child_0_cal_state = list(child_0.id.values())[0]
-    #     self.assertEqual(child_0_cal_state, 1)
+        child_0 = children[0]
+        child_1 = children[1]
+        child_0_cal_state = list(child_0.id.values())[0]
+        self.assertEqual(child_0_cal_state, 1)
 
-    #     child_1_cal_state = list(child_1.id.values())[0]
-    #     self.assertEqual(child_1_cal_state, 3)
+        child_1_cal_state = list(child_1.id.values())[0]
+        self.assertEqual(child_1_cal_state, 3)
 
+    @unittest.skip()  
     @data((3, 3, 0.125), (2, 4, 0.25))
     @unpack
     def testRollout(self, max_rollout_step, init_state, gt_sum_value):
