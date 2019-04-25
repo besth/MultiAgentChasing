@@ -1,9 +1,11 @@
+import sys
+sys.path.append('..')
 import unittest
 import numpy as np
 from ddt import ddt, data, unpack
 from anytree import AnyNode as Node
 # from MultiAgent-Chasing
-from MultiAgent_Chasing.src.algorithms.mcts import CalculateScore, SelectChild, Expand, RollOut, backup
+from algorithms.mcts import CalculateScore, SelectChild, Expand, RollOut, backup
 from simple1DEnv import TransitionFunction, RewardFunction, Terminal
 
 
@@ -46,11 +48,11 @@ class TestMCTS(unittest.TestCase):
     def testCalculateScore(self, parent_visit_number, self_visit_number, sum_value, action_prior, groundtruth_score):
         curr_node = Node(num_visited = parent_visit_number)
         child = Node(num_visited = self_visit_number, sum_value = sum_value, action_prior = action_prior)
-        score = calculate_score(curr_node, child)
+        score = self.calculateScore(curr_node, child)
         self.assertEqual(score, groundtruth_score)
 
 
-    @unittest.skip()  
+    @unittest.skip  
     @data()
     @unpack
     def testSelectChild(self, firstChildVisited, firstChildSumValue, secondChildVisited, secondChildSumValue):
@@ -62,7 +64,7 @@ class TestMCTS(unittest.TestCase):
 
         self.assertEqual(gt_action, child_id_action)
        
-    @unittest.skip()  
+    @unittest.skip  
     def testExpand(self):
         # test whether children have been created with the correct values.
         curr_node = self.level1_0
@@ -80,10 +82,11 @@ class TestMCTS(unittest.TestCase):
         self.assertEqual(child_1_cal_state, 3)
 
 
+    @unittest.skip 
     @data((4, 3, 0.125), (3, 4, 0.25))
     @unpack
     def testRollout(self, max_rollout_step, init_state, gt_sum_value):
-        max_iteration = 1000
+        max_iteration = 100000
 
         target_state = 6
         isTerminal = Terminal(target_state)
@@ -102,7 +105,7 @@ class TestMCTS(unittest.TestCase):
         
         calc_sum_value = np.mean(stored_reward)
         # print(stored_reward)
-        self.assertAlmostEqual(gt_sum_value, calc_sum_value)
+        self.assertAlmostEqual(gt_sum_value, calc_sum_value, places=2)
 
 
 

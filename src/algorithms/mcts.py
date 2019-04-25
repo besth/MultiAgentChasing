@@ -84,7 +84,7 @@ class RollOut:
         for rollout_step in range(self.max_rollout_step):
             action = self.rollout_policy(curr_state)
             sum_reward += self.reward_func(curr_state, action)
-            print(rollout_step, action, sum_reward, curr_state)
+            # print(rollout_step, action, sum_reward, curr_state)
             if self.is_terminal(curr_state):
                 break
 
