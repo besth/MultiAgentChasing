@@ -90,21 +90,39 @@ def backup(value, node_list):
         node.sum_value += value
         node.num_visited += 1
 
-def select_next_root(curr_root):
-    # children_num_visited = [child.num_visited for child in curr_root.children]
-    # selected_child_index = np.argmax(children_num_visited)
-    # if children_num_visited[0] != children_num_visited[1]:
-    #     selected_child_index = np.argmax(children_num_visited)
-    # else:
-    #     selected_child_index = np.random.choice([0, 1])
-    children_mean_value = [child.sum_value / child.num_visited for child in curr_root.children]
-    if children_mean_value[0] != children_mean_value[1]:
-        selected_child_index = np.argmax(children_mean_value)
-    else:
-        selected_child_index = np.random.choice([0, 1])
-    
-    next_root = curr_root.children[selected_child_index]
-    return next_root
+class SelectNextRoot:
+    def __init__(self, resetRoot):
+        self.resetRoot = resetRoot
+    def __call__(self, curr_root):
+        children_mean_value = [child.sum_value / child.num_visited for child in curr_root.children]
+        if children_mean_value[0] != children_mean_value[1]:
+            selected_child_index = np.argmax(children_mean_value)
+        else:
+            selected_child_index = np.random.choice([0, 1])
+        
+        selected_child = curr_root.children[selected_child_index]
+        next_state = list(selected_child.id.values())[0]
+        next_root = self.resetRoot(next_state)
+        return next_root
+
+
+class ResetRoot:
+    def __init__(self, actionSpace, transition, getActionPrior):
+        self.actionSpace = actionSpace
+        self.transition = transition
+        self.getActionPrior = getActionPrior
+
+    def __call__(self, rootState):
+        rootAction = np.random.choice(self.actionSpace)
+        initActionPrior = self.getActionPrior(rootState)
+        initRootNode = Node(id={rootAction: rootState}, num_visited=1, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
+
+        # Create non-expanded children of the root.
+        for action in self.actionSpace:
+            nextState = self.transition(rootState, action)
+            Node(parent=initRootNode, id={action: nextState}, num_visited=1, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
+
+        return initRootNode
 
 class MCTS:
     def __init__(self, num_simulation, selectChild, expand, rollout, backup, select_next_root):
@@ -116,8 +134,8 @@ class MCTS:
         self.select_next_root = select_next_root 
 
     def __call__(self, curr_root):
+        # curr_root_store = copy.deepcopy(curr_root)
         for explore_step in range(self.num_simulation):
-            # print(curr_root)
             curr_node = curr_root
             node_path = list()
 
@@ -132,7 +150,8 @@ class MCTS:
             value = self.rollout(leaf_node)
             self.backup(value, node_path)
         
-        next_root = select_next_root(curr_root)
+        next_root = self.select_next_root(curr_root)
+        # print(RenderTree(next_root))
         return next_root
 
 def main():
