@@ -15,6 +15,7 @@ class CalculateScore:
         action_prior = child.action_prior
 
         exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_base) + self.c_init
+        # exploration_rate = 1.0
         u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
         q_score = mean_value
 
@@ -32,12 +33,13 @@ class SelectChild:
         child = curr_node.children[selected_child_index]
         return child
 
-class ActionPriorFunction:
+class GetActionPrior:
     def __init__(self, action_space):
         self.action_space = action_space
         
     def __call__(self, curr_state):
         action_prior = {action: 1/len(self.action_space) for action in self.action_space}
+        # action_prior = {-1: 0.48, 1: 0.52}
         return action_prior 
 
 class Expand:
@@ -52,7 +54,7 @@ class Expand:
             leaf_node.is_expanded = True
             action_prior_distribution = self.action_prior_func(curr_state)
             
-            for action, prior in action_prior_distribution.iteritems():
+            for action, prior in action_prior_distribution.items():
                 next_state = self.transition_func(curr_state, action)
                 Node(parent=leaf_node, id={action: next_state}, num_visited=1, sum_value=0,
                     action_prior=prior, is_expanded=False)
@@ -89,23 +91,34 @@ def backup(value, node_list):
         node.num_visited += 1
 
 def select_next_root(curr_root):
-    children_num_visited = [child.num_visited for child in curr_root.children]
-    selected_child_index = np.argmax(children_num_visited)
+    # children_num_visited = [child.num_visited for child in curr_root.children]
+    # selected_child_index = np.argmax(children_num_visited)
+    # if children_num_visited[0] != children_num_visited[1]:
+    #     selected_child_index = np.argmax(children_num_visited)
+    # else:
+    #     selected_child_index = np.random.choice([0, 1])
+    children_mean_value = [child.sum_value / child.num_visited for child in curr_root.children]
+    if children_mean_value[0] != children_mean_value[1]:
+        selected_child_index = np.argmax(children_mean_value)
+    else:
+        selected_child_index = np.random.choice([0, 1])
+    
     next_root = curr_root.children[selected_child_index]
     return next_root
 
 class MCTS:
     def __init__(self, num_simulation, selectChild, expand, rollout, backup, select_next_root):
         self.num_simulation = num_simulation
-        self.select_child = select_child
+        self.select_child = selectChild
         self.expand = expand
         self.rollout = rollout
         self.backup = backup
         self.select_next_root = select_next_root 
 
     def __call__(self, curr_root):
-        curr_node = curr_root
         for explore_step in range(self.num_simulation):
+            # print(curr_root)
+            curr_node = curr_root
             node_path = list()
 
             while curr_node.is_expanded:

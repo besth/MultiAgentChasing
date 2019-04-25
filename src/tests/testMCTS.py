@@ -4,8 +4,9 @@ import unittest
 import numpy as np
 from ddt import ddt, data, unpack
 from anytree import AnyNode as Node
-# from MultiAgent-Chasing
-from algorithms.mcts import CalculateScore, SelectChild, Expand, RollOut, backup, ActionPriorFunction
+
+# Local import
+from algorithms.mcts import CalculateScore, SelectChild, Expand, RollOut, backup, GetActionPrior
 from simple1DEnv import TransitionFunction, RewardFunction, Terminal
 
 
@@ -19,7 +20,7 @@ class TestMCTS(unittest.TestCase):
 
         self.action_space = [-1, 1]
         self.num_action_space = len(self.action_space)
-        self.action_prior_func = ActionPriorFunction(self.action_space)
+        self.action_prior_func = GetActionPrior(self.action_space)
 
         step_penalty = -1
         catch_reward = 1
