@@ -2,7 +2,8 @@ import unittest
 import numpy as np
 from ddt import ddt, data, unpack
 from anytree import AnyNode as Node
-from algorithms.mcts import CalculateScore, SelectChild, Expand, RollOut, backup
+# from MultiAgent-Chasing
+from MultiAgent_Chasing.src.algorithms.mcts import CalculateScore, SelectChild, Expand, RollOut, backup
 from simple1DEnv import TransitionFunction, RewardFunction, Terminal
 
 
@@ -75,7 +76,7 @@ class TestMCTS(unittest.TestCase):
     #     child_1_cal_state = list(child_1.id.values())[0]
     #     self.assertEqual(child_1_cal_state, 3)
 
-    @data((3, 3, 0.125), (2, 4, 0.25))
+    @data((4, 3, 0.125), (3, 4, 0.25))
     @unpack
     def testRollout(self, max_rollout_step, init_state, gt_sum_value):
         max_iteration = 1000
@@ -92,11 +93,11 @@ class TestMCTS(unittest.TestCase):
         rollout = RollOut(rollout_policy, max_rollout_step, self.transition, reward_func, isTerminal)
         stored_reward = []
         for curr_iter in range(max_iteration):
-            print(curr_iter, rollout(leaf_node))
+            # print(curr_iter, rollout(leaf_node))
             stored_reward.append(rollout(leaf_node))
         
         calc_sum_value = np.mean(stored_reward)
-        print(stored_reward)
+        # print(stored_reward)
         self.assertAlmostEqual(gt_sum_value, calc_sum_value)
 
 
