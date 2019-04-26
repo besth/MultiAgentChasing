@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+import itertools as it
 
 from anytree import AnyNode as Node
 from anytree import RenderTree
@@ -7,6 +8,7 @@ from anytree import RenderTree
 # Local import
 from algorithms.mcts import MCTS, CalculateScore, GetActionPrior, SelectNextRoot, SelectChild, Expand, RollOut, backup, ResetRoot
 from simple1DEnv import TransitionFunction, RewardFunction, Terminal
+from visualize import draw
 
 
 class RunMCTS:
@@ -30,7 +32,7 @@ class RunMCTS:
         print(runningStep)
         return runningStep
 
-def main():
+def evaluate(cInit, cBase):
     # Transition function
     envBoundLow = 0
     envBoundHigh = 7
@@ -42,15 +44,13 @@ def main():
     getActionPrior = GetActionPrior(actionSpace)
 
     # Reward function
-    stepPenalty = -1
+    stepPenalty = -0.1
     catchReward = 1
     targetState = envBoundHigh
     isTerminal = Terminal(targetState)
     reward = RewardFunction(stepPenalty, catchReward, isTerminal)
 
     # UCB score calculation - values from AlphaZero source code
-    cInit = 1.25
-    cBase = 19652
     calculateScore = CalculateScore(cInit, cBase)
 
     selectChild = SelectChild(calculateScore)
@@ -58,12 +58,12 @@ def main():
 
     # Rollout
     rolloutPolicy = lambda state: np.random.choice(actionSpace)
-    maxRollOutSteps = 200
+    maxRollOutSteps = 10
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transition, reward, isTerminal)
 
     # Hyper-parameters
-    numSimulations = 10000
-    maxRunningSteps = 200
+    numSimulations = 1000
+    maxRunningSteps = 20
 
     # MCTS algorithm
     resetRoot = ResetRoot(actionSpace, transition, getActionPrior)
@@ -75,18 +75,29 @@ def main():
     runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal)
 
     # testing
-    numTestingIterations = 10
+    numTestingIterations = 100
     episodeLengths = []
     # currState = initState
     for step in range(numTestingIterations):
         rootNode = resetRoot(initState)
-        print("Curr step", step)
         episodeLength = runMCTS(rootNode)
         # rootNode = Node(id={rootAction: initState}, num_visited=1, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
         episodeLengths.append(episodeLength)
 
     meanEpisodeLength = np.mean(episodeLengths)
     print("mean episode length is", meanEpisodeLength)
+    return [meanEpisodeLength]
+
+def main():
+    
+    cInit = [1, 10, 100, 1000, 10000]
+    cBase = [1, 10, 100, 1000, 10000]
+    modelResults = {(init, base): evaluate(init, base) for init, base in it.product(cInit, cBase)}
+
+    print("Finished evaluating")
+    # Visualize
+    independentVariableNames = ['cInit', 'cBase']
+    draw(modelResults, independentVariableNames)
 
 if __name__ == "__main__":
     main()

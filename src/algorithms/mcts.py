@@ -18,8 +18,7 @@ class CalculateScore:
         # exploration_rate = 1.0
         u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
         q_score = mean_value
-
-        score = q_score*0 + u_score
+        score = q_score + u_score
         return score
 
 
@@ -39,7 +38,6 @@ class GetActionPrior:
         
     def __call__(self, curr_state):
         action_prior = {action: 1/len(self.action_space) for action in self.action_space}
-        # action_prior = {-1: 0.48, 1: 0.52}
         return action_prior 
 
 class Expand:
@@ -81,7 +79,7 @@ class RollOut:
 
             next_state = self.transition_func(curr_state, action)
             curr_state = next_state
-
+        #sum_reward = list(leaf_node.id.values())[0] - 7
         return sum_reward
 
 
@@ -117,7 +115,6 @@ class ResetRoot:
         initActionPrior = self.getActionPrior(rootState)
         initRootNode = Node(id={rootAction: rootState}, num_visited=1, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
 
-        # Create non-expanded children of the root.
         for action in self.actionSpace:
             nextState = self.transition(rootState, action)
             Node(parent=initRootNode, id={action: nextState}, num_visited=1, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
@@ -134,7 +131,6 @@ class MCTS:
         self.select_next_root = select_next_root 
 
     def __call__(self, curr_root):
-        # curr_root_store = copy.deepcopy(curr_root)
         for explore_step in range(self.num_simulation):
             curr_node = curr_root
             node_path = list()
@@ -149,7 +145,6 @@ class MCTS:
             leaf_node = self.expand(curr_node)
             value = self.rollout(leaf_node)
             self.backup(value, node_path)
-        #print(curr_root.children)  
         next_root = self.select_next_root(curr_root)
         return next_root
 
