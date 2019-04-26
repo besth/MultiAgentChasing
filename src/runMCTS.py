@@ -39,12 +39,12 @@ def evaluate(cInit, cBase):
     transition = TransitionFunction(envBoundLow, envBoundHigh)
 
     # Action space
-    actionSpace = [-1, 1]
+    actionSpace = [-1,1]
     numActions = len(actionSpace)
     getActionPrior = GetActionPrior(actionSpace)
 
     # Reward function
-    stepPenalty = -0.1
+    stepPenalty = -0.05
     catchReward = 1
     targetState = envBoundHigh
     isTerminal = Terminal(targetState)
@@ -58,12 +58,12 @@ def evaluate(cInit, cBase):
 
     # Rollout
     rolloutPolicy = lambda state: np.random.choice(actionSpace)
-    maxRollOutSteps = 10
+    maxRollOutSteps = 60
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transition, reward, isTerminal)
 
     # Hyper-parameters
-    numSimulations = 1000
-    maxRunningSteps = 20
+    numSimulations = 100
+    maxRunningSteps = 30
 
     # MCTS algorithm
     resetRoot = ResetRoot(actionSpace, transition, getActionPrior)
@@ -90,8 +90,8 @@ def evaluate(cInit, cBase):
 
 def main():
     
-    cInit = [1, 10, 100, 1000, 10000]
-    cBase = [1, 10, 100, 1000, 10000]
+    cInit = [10, 100, 1000, 10000, 100000]
+    cBase = [1000]
     modelResults = {(init, base): evaluate(init, base) for init, base in it.product(cInit, cBase)}
 
     print("Finished evaluating")

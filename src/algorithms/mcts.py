@@ -28,7 +28,10 @@ class SelectChild:
 
     def __call__(self, curr_node):
         scores = [self.calculate_score(curr_node, child) for child in curr_node.children]
-        selected_child_index = np.argmax(scores)
+        if scores[0] != scores[1]:
+            selected_child_index = np.argmax(scores)
+        else:
+            selected_child_index = np.random.choice([0, 1])
         child = curr_node.children[selected_child_index]
         return child
 
@@ -92,7 +95,7 @@ class SelectNextRoot:
     def __init__(self, resetRoot):
         self.resetRoot = resetRoot
     def __call__(self, curr_root):
-        children_mean_value = [child.sum_value / child.num_visited for child in curr_root.children]
+        children_mean_value = [child.num_visited for child in curr_root.children]
         if children_mean_value[0] != children_mean_value[1]:
             selected_child_index = np.argmax(children_mean_value)
         else:
