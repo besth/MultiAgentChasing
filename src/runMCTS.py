@@ -92,8 +92,8 @@ def evaluate(cInit, cBase):
 
 def main():
     
-    cInit = [1, 10, 100, 1000, 10000]
-    cBase = [1000, 10000]
+    cInit = [1/10000, 1/100, 1, 100, 10000]
+    cBase = [100, 1000]
     modelResults = {(init, base): evaluate(init, base) for init, base in it.product(cInit, cBase)}
 
     print("Finished evaluating")
