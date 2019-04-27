@@ -15,7 +15,6 @@ class CalculateScore:
         action_prior = child.action_prior
 
         exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_base) + self.c_init
-        # exploration_rate = 1.0
         u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
         q_score = mean_value
         score = q_score + u_score
@@ -31,9 +30,10 @@ class SelectChild:
         if scores[0] != scores[1]:
             selected_child_index = np.argmax(scores)
         else:
-            selected_child_index = np.random.choice([0, 1])
+            selected_child_index = np.random.choice(range(len(curr_node.children)))
         child = curr_node.children[selected_child_index]
         return child
+
 
 class GetActionPrior:
     def __init__(self, action_space):
@@ -43,22 +43,18 @@ class GetActionPrior:
         action_prior = {action: 1/len(self.action_space) for action in self.action_space}
         return action_prior 
 
+
 class Expand:
-    def __init__(self, action_prior_func, transition_func, is_terminal):
-        self.action_prior_func = action_prior_func
+    def __init__(self, transition_func, is_terminal, initializeChildren):
         self.transition_func = transition_func
         self.is_terminal = is_terminal
+        self.initializeChildren = initializeChildren
 
     def __call__(self, leaf_node):
         curr_state = list(leaf_node.id.values())[0]
         if not self.is_terminal(curr_state):
             leaf_node.is_expanded = True
-            action_prior_distribution = self.action_prior_func(curr_state)
-            
-            for action, prior in action_prior_distribution.items():
-                next_state = self.transition_func(curr_state, action)
-                Node(parent=leaf_node, id={action: next_state}, num_visited=1, sum_value=0,
-                    action_prior=prior, is_expanded=False)
+            leaf_node = self.initializeChildren(leaf_node)
 
         return leaf_node
 
@@ -82,9 +78,7 @@ class RollOut:
 
             next_state = self.transition_func(curr_state, action)
             curr_state = next_state
-        #sum_reward = list(leaf_node.id.values())[0] - 7
         return sum_reward
-
 
 def backup(value, node_list):
     for node in node_list:
@@ -92,37 +86,35 @@ def backup(value, node_list):
         node.num_visited += 1
 
 class SelectNextRoot:
-    def __init__(self, resetRoot):
-        self.resetRoot = resetRoot
+    def __init__(self, initializeChildren):
+        self.initializeChildren = initializeChildren
     def __call__(self, curr_root):
         children_mean_value = [child.num_visited for child in curr_root.children]
         if children_mean_value[0] != children_mean_value[1]:
             selected_child_index = np.argmax(children_mean_value)
         else:
-            selected_child_index = np.random.choice([0, 1])
+            selected_child_index = np.random.choice(range(len(curr_root.children)))
         
         selected_child = curr_root.children[selected_child_index]
-        next_state = list(selected_child.id.values())[0]
-        next_root = self.resetRoot(next_state)
+        next_root = self.initializeChildren(selected_child)
         return next_root
 
 
-class ResetRoot:
+class InitializeChildren:
     def __init__(self, actionSpace, transition, getActionPrior):
         self.actionSpace = actionSpace
         self.transition = transition
         self.getActionPrior = getActionPrior
 
-    def __call__(self, rootState):
-        rootAction = np.random.choice(self.actionSpace)
-        initActionPrior = self.getActionPrior(rootState)
-        initRootNode = Node(id={rootAction: rootState}, num_visited=1, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
+    def __call__(self, node):
+        state = list(node.id.values())[0]
+        initActionPrior = self.getActionPrior(state)
 
         for action in self.actionSpace:
-            nextState = self.transition(rootState, action)
-            Node(parent=initRootNode, id={action: nextState}, num_visited=1, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
+            nextState = self.transition(state, action)
+            Node(parent=node, id={action: nextState}, num_visited=1, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
 
-        return initRootNode
+        return node
 
 class MCTS:
     def __init__(self, num_simulation, selectChild, expand, rollout, backup, select_next_root):
