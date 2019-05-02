@@ -29,7 +29,7 @@ class RunMCTS:
         runningStep = 0
         while runningStep < self.maxRunningSteps:
             currState = list(rootNode.id.values())[0]
-            self.render(currState)
+            #self.render(currState)
             if self.isTerminal(currState):
                 break
             nextRoot = self.mcts(rootNode)
@@ -40,15 +40,15 @@ class RunMCTS:
         print(runningStep)
         return runningStep
 
-def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 10):
+def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 100):
     actionSpace = [(10,0),(7,7),(0,10),(-7,7),(-10,0),(-7,-7),(0,-10),(7,-7)]
     numActionSpace = len(actionSpace)
     getActionPrior = GetActionPrior(actionSpace)
     numStateSpace = 4
 
     # 2D Env
-    initSheepPosition = np.array([60, 60]) 
-    initWolfPosition = np.array([40, 40])
+    initSheepPosition = np.array([65, 65]) 
+    initWolfPosition = np.array([45, 45])
     initSheepPositionNoise = np.array([0, 0])
     initWolfPositionNoise = np.array([0, 0])
     sheepPositionReset = ag.SheepPositionReset(initSheepPosition, initSheepPositionNoise)
@@ -56,8 +56,8 @@ def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 10):
     
     numOneAgentState = 2
     positionIndex = [0, 1]
-    xBoundary = [0, 80]
-    yBoundary = [0, 80]
+    xBoundary = [0, 90]
+    yBoundary = [0, 90]
     checkBoundaryAndAdjust = ag.CheckBoundaryAndAdjust(xBoundary, yBoundary) 
     sheepPositionTransition = ag.SheepPositionTransition(numOneAgentState, positionIndex, checkBoundaryAndAdjust) 
     wolfSpeed = 7
@@ -68,7 +68,7 @@ def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 10):
     sheepId = 0
     wolfId = 1
     transition = env.TransitionFunction(sheepId, wolfId, sheepPositionReset, wolfPositionReset, sheepPositionTransition, wolfPositionTransition)
-    minDistance = 10
+    minDistance = 9
     isTerminal = env.IsTerminal(sheepId, wolfId, numOneAgentState, positionIndex, minDistance) 
      
     screen = pg.display.set_mode([xBoundary[1], yBoundary[1]])
@@ -85,7 +85,7 @@ def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 10):
     
     # Hyper-parameters
     numSimulations = int(2048/numTree)
-    maxRunningSteps = 20
+    maxRunningSteps = 25
 
     # MCTS algorithm
     # Select child
@@ -99,7 +99,7 @@ def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 10):
 
     # Rollout
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
-    maxRollOutSteps = 60
+    maxRollOutSteps = 70
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transition, rewardFunction, isTerminal)
 
     #numTree = 10
@@ -108,8 +108,9 @@ def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 10):
     runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal, render)
 
     rootAction = actionSpace[np.random.choice(range(numActionSpace))]
-    numTestingIterations = 30
+    numTestingIterations = 40
     episodeLengths = []
+    escape = 0
     for step in range(numTestingIterations):
         import datetime
         print (datetime.datetime.now())
@@ -119,9 +120,11 @@ def evaluate(numTree, chasingSubtlety, cInit = 1, cBase = 10):
         rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded = False)
         episodeLength = runMCTS(rootNode)
         episodeLengths.append(episodeLength)
+        if episodeLength >= maxRunningSteps - 1:
+            escape = escape + 1
     meanEpisodeLength = np.mean(episodeLengths)
-    print("mean episode length is", meanEpisodeLength)
-    return [meanEpisodeLength]
+    print("mean episode length is", meanEpisodeLength, escape/numTestingIterations)
+    return [meanEpisodeLength, escape/numTestingIterations]
 
 def evaluate1D(cInit, cBase):
     # Transition function
@@ -168,13 +171,14 @@ def main():
     #cBase = [1]
     #modelResults = {(np.log10(init), np.log10(base)): evaluate(init, base) for init, base in it.product(cInit, cBase)}
 
-    numTrees = [1,2]
-    subtleties = [50,1.83]
+    numTrees = [4, 16]
+    subtleties = [50000]
+    #, 50, 3.3, 0.92]
     modelResults = {(numTree, chasingSubtlety): evaluate(numTree, chasingSubtlety) for numTree, chasingSubtlety in it.product(numTrees, subtleties)}
 
     print("Finished evaluating")
     # Visualize
-    independentVariableNames = ['cInit', 'cBase']
+    #independentVariableNames = ['cInit', 'cBase']
     independentVariableNames = ['numTree', 'chasingSubtlety']
     draw(modelResults, independentVariableNames)
 
