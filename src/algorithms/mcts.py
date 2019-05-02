@@ -87,16 +87,14 @@ def backup(value, node_list):
         node.sum_value += value
         node.num_visited += 1
 
-class SelectNextRoot:
-    def __init__(self, initializeChildren):
-        self.initializeChildren = initializeChildren
-    def __call__(self, curr_root):
-        children_visit = [child.num_visited for child in curr_root.children]
-        maxIndex = np.argwhere(children_visit == np.max(children_visit)).flatten()
-        selected_child_index = np.random.choice(maxIndex)
-        selected_child = curr_root.children[selected_child_index]
-        next_root = self.initializeChildren(selected_child)
-        return next_root
+def selectNextRoot(curr_root):
+    children_visit = [child.num_visited for child in curr_root.children]
+    maxIndex = np.argwhere(children_visit == np.max(children_visit)).flatten()
+    selected_child_index = np.random.choice(maxIndex)
+    selected_child = curr_root.children[selected_child_index]
+    next_root_id = selected_child.id
+    next_root = Node(id = next_root_id, num_visited=0, sum_value=0, is_expanded = False)
+    return next_root
 
 
 class InitializeChildren:
@@ -125,9 +123,10 @@ class MCTS:
         self.select_next_root = select_next_root 
 
     def __call__(self, curr_root):
+        curr_root = self.expand(curr_root)
         for explore_step in range(self.num_simulation):
             curr_node = curr_root
-            node_path = list()
+            node_path = [curr_node]
 
             while curr_node.is_expanded:
                 next_node = self.select_child(curr_node)

@@ -58,7 +58,6 @@ class Expand:
         if not self.is_terminal(curr_state):
             leaf_node.is_expanded = True
             leaf_node = self.initializeChildren(leaf_node)
-
         return leaf_node
 
 
@@ -89,39 +88,19 @@ def backup(value, node_list):
         node.num_visited += 1
 
 class SelectNextRoot:
-    def __init__(self, initializeChildren, transition):
-        self.initializeChildren = initializeChildren
+    def __init__(self, transition):
         self.transition = transition
     def __call__(self, roots):
-        # First select which tree to use
-        # children_visits = [np.sum([child.num_visited for child in root.children]) for root in roots]
-        # print(children_visits)
-        # maxRootIndex = np.argwhere(children_visits == np.max(children_visits)).flatten()
-        # selected_root_index = np.random.choice(maxRootIndex)
-        # print(maxRootIndex)
-        # curr_root = roots[maxRootIndex]
-
-        # Then consider all possible children of selected tree
-        # print(roots[0])
-
-        # print([[child.num_visited for child in root.children] for root in roots])
-
         curr_children_visit = np.sum([[child.num_visited for child in root.children] for root in roots], axis=0)
-        # print(curr_children_visit)
         maxIndex = np.argwhere(curr_children_visit == np.max(curr_children_visit)).flatten()
         selected_child_index = np.random.choice(maxIndex)
         
-        action = list(roots[0].children[selected_child_index].id.keys())[0]
         curr_state = list(roots[0].id.values())[0]
+        action = list(roots[0].children[selected_child_index].id.keys())[0]
         next_state = self.transition(curr_state, action)
-        # print(curr_state, action, next_state)
-        # next_state += 1
 
         selected_child = roots[0].children[selected_child_index]
-        # print("before", selected_child.id, selected_child)
-        selected_child.id = {action: next_state}
-        # print("after", selected_child.id, selected_child)
-        next_root = self.initializeChildren(selected_child)
+        next_root = Node(id={action: next_state}, num_visited=0, sum_value=0, is_expanded = False)
         return next_root
 
 
@@ -134,7 +113,7 @@ class InitializeChildren:
     def __call__(self, node):
         state = list(node.id.values())[0]
         initActionPrior = self.getActionPrior(state)
-
+        #__import__('ipdb').set_trace()
         for action in self.actionSpace:
             nextState = self.transition(state, action)
             Node(parent=node, id={action: nextState}, num_visited=0, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
@@ -153,11 +132,13 @@ class MCTS:
 
     def __call__(self, curr_root):
         roots = []
-        curr_tree_root = copy.deepcopy(curr_root)
+        curr_root_copy = copy.deepcopy(curr_root)
         for tree_index in range(self.num_tree):
+            curr_tree_root = copy.deepcopy(curr_root_copy)
+            curr_tree_root = self.expand(curr_tree_root)
             for explore_step in range(self.num_simulation):
                 curr_node = curr_tree_root
-                node_path = list()
+                node_path = [curr_node]
 
                 while curr_node.is_expanded:
                     next_node = self.select_child(curr_node)
@@ -169,7 +150,10 @@ class MCTS:
                 leaf_node = self.expand(curr_node)
                 value = self.rollout(leaf_node)
                 self.backup(value, node_path)
-
+                #print(RenderTree(curr_tree_root))
+                #__import__('ipdb').set_trace()
+            #print(curr_tree_root.children)
+            #print(RenderTree(curr_tree_root))
             roots.append(curr_tree_root)
             
         next_root = self.select_next_root(roots)

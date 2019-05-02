@@ -7,9 +7,7 @@ from anytree import AnyNode as Node
 from anytree import RenderTree
 
 # Local import
-# from algorithms.mcts import MCTS, CalculateScore, GetActionPrior, SelectNextRoot, SelectChild, Expand, RollOut, backup, InitializeChildren
-from algorithms.stochasticMCTS import MCTS, CalculateScore, GetActionPrior, SelectNextRoot, SelectChild, Expand, RollOut, backup, InitializeChildren
-
+from algorithms.mcts import MCTS, CalculateScore, GetActionPrior, selectNextRoot, SelectChild, Expand, RollOut, backup, InitializeChildren
 from simple1DEnv import TransitionFunction, RewardFunction, Terminal
 from visualize import draw
 import agentsMotionSimulation as ag
@@ -45,8 +43,7 @@ def evaluate(cInit, cBase):
     numActionSpace = len(actionSpace)
     getActionPrior = GetActionPrior(actionSpace)
     numStateSpace = 4
-
-    # 2D Env
+   
     initSheepPosition = np.array([90, 90]) 
     initWolfPosition = np.array([90, 90])
     initSheepVelocity = np.array([0, 0])
@@ -85,7 +82,7 @@ def evaluate(cInit, cBase):
     rewardFunction = reward.RewardFunctionTerminalPenalty(sheepId, wolfId, numOneAgentState, positionIndex, aliveBouns, deathPenalty, isTerminal) 
     
     # Hyper-parameters
-    numSimulations = 100
+    numSimulations = 600
     maxRunningSteps = 70
 
     # MCTS algorithm
@@ -96,75 +93,32 @@ def evaluate(cInit, cBase):
     # expand
     initializeChildren = InitializeChildren(actionSpace, transition, getActionPrior)
     expand = Expand(transition, isTerminal, initializeChildren)
-    selectNextRoot = SelectNextRoot(initializeChildren, transition)
+    #selectNextRoot = selectNextRoot
 
     # Rollout
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
     maxRollOutSteps = 50
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transition, rewardFunction, isTerminal)
 
-    numTree = 2
-    mcts = MCTS(numTree, numSimulations, selectChild, expand, rollout, backup, selectNextRoot)
+    mcts = MCTS(numSimulations, selectChild, expand, rollout, backup, selectNextRoot)
     
     runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal, render)
 
     rootAction = actionSpace[np.random.choice(range(numActionSpace))]
     numTestingIterations = 70
     episodeLengths = []
-    # currState = initState
     for step in range(numTestingIterations):
         import datetime
         print (datetime.datetime.now())
         state, action = None, None
         initState = transition(state, action)
-        optimal = math.ceil((np.sqrt(np.sum(np.power(initState[0:2] - initState[2:4], 2))) - minDistance )/10)
-        initActionPrior = getActionPrior(initState)
-        rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
-        rootNode = initializeChildren(rootNode)
+        #optimal = math.ceil((np.sqrt(np.sum(np.power(initState[0:2] - initState[2:4], 2))) - minDistance )/10)
+        rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
         episodeLength = runMCTS(rootNode)
         episodeLengths.append(episodeLength)
     meanEpisodeLength = np.mean(episodeLengths)
     print("mean episode length is", meanEpisodeLength)
     return [meanEpisodeLength]
-
-def evaluate1D(cInit, cBase):
-    # Transition function
-    envBoundLow = 0
-    envBoundHigh = 7
-    transition = TransitionFunction(envBoundLow, envBoundHigh)
-    # Action space
-    actionSpace = [-1,1]
-    numActions = len(actionSpace)
-    getActionPrior = GetActionPrior(actionSpace)
-    # Reward function
-    stepPenalty = -0.05
-    catchReward = 1
-    targetState = envBoundHigh
-    isTerminal = Terminal(targetState)
-    reward = RewardFunction(stepPenalty, catchReward, isTerminal)
-
-    # Hyper-parameters
-    numSimulations = 100
-    maxRunningSteps = 20
-
-    # MCTS algorithm
-    # Select child
-    calculateScore = CalculateScore(cInit, cBase)
-    selectChild = SelectChild(calculateScore)
-
-    # expand
-    initializeChildren = InitializeChildren(actionSpace, transition, getActionPrior)
-    expand = Expand(transition, isTerminal, initializeChildren)
-    selectNextRoot = SelectNextRoot(initializeChildren, transition)
-
-    # Rollout
-    rolloutPolicy = lambda state: np.random.choice(actionSpace)
-    maxRollOutSteps = 60
-    rollout = RollOut(rolloutPolicy, maxRollOutSteps, transition, reward, isTerminal)
-
-    mcts = MCTS(numSimulations, selectChild, expand, rollout, backup, selectNextRoot)
-
-    runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal)
 
 def main():
     
