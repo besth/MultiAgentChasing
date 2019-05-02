@@ -63,7 +63,7 @@ def evaluate(cInit, cBase):
     sheepId = 0
     wolfId = 1
     transition = env.TransitionFunction(sheepId, wolfId, sheepPositionReset, wolfPositionReset, sheepPositionTransition, wolfPositionTransition)
-    minDistance = 15
+    minDistance = 10
     isTerminal = env.IsTerminal(sheepId, wolfId, numOneAgentState, positionIndex, minDistance) 
      
     screen = pg.display.set_mode([xBoundary[1], yBoundary[1]])
@@ -110,7 +110,7 @@ def evaluate(cInit, cBase):
         initState = transition(state, action)
         optimal = math.ceil((np.sqrt(np.sum(np.power(initState[0:2] - initState[2:4], 2))) - minDistance )/10)
         initActionPrior = getActionPrior(initState)
-        rootNode = Node(id={rootAction: initState}, num_visited=1, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
+        rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
         rootNode = initializeChildren(rootNode)
         episodeLength = runMCTS(rootNode)
         episodeLengths.append(episodeLength - optimal)

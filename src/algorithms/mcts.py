@@ -11,12 +11,16 @@ class CalculateScore:
     def __call__(self, curr_node, child):
         parent_visit_count = curr_node.num_visited
         self_visit_count = child.num_visited
-        mean_value = child.sum_value / self_visit_count
         action_prior = child.action_prior
 
-        exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_base) + self.c_init
-        u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
-        q_score = mean_value
+        if self_visit_count == 0:
+            u_score = np.inf
+            q_score = 0
+        else:
+            exploration_rate = np.log((1 + parent_visit_count + self.c_base) / self.c_base) + self.c_init
+            u_score = exploration_rate * action_prior * np.sqrt(parent_visit_count) / float(1 + self_visit_count) 
+            q_score = child.sum_value / self_visit_count
+
         score = q_score + u_score
         return score
 
@@ -107,7 +111,7 @@ class InitializeChildren:
 
         for action in self.actionSpace:
             nextState = self.transition(state, action)
-            Node(parent=node, id={action: nextState}, num_visited=1, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
+            Node(parent=node, id={action: nextState}, num_visited=0, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
 
         return node
 
