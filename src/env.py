@@ -21,7 +21,7 @@ class TransitionFunction():
             wolfPosition = self.wolfPositionReset()
         else:
             sheepPosition = self.sheepPositionTransition(oldState, self.sheepId, action)
-            wolfPosition = self.wolfPositionTransition(oldState, self.wolfId)
+            wolfPosition = self.wolfPositionTransition(oldState, self.wolfId, self.sheepId)
         newState = np.concatenate([sheepPosition, wolfPosition])
         return newState
 
@@ -67,7 +67,7 @@ class Render():
             pg.display.flip()
             currentDir = os.getcwd()
             parentDir = os.path.abspath(os.path.join(currentDir, os.pardir))
-            saveImageDir=parentDir+'/chasing/data/'+self.saveImageFile
+            saveImageDir=parentDir+'/src/data/'+self.saveImageFile
             if self.saveImage==True:
                 filenameList = os.listdir(saveImageDir)
                 pg.image.save(self.screen,saveImageDir+'/'+str(len(filenameList))+'.png')

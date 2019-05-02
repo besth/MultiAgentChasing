@@ -16,16 +16,18 @@ import reward
 
 
 class RunMCTS:
-    def __init__(self, mcts, maxRunningSteps, isTerminal):
+    def __init__(self, mcts, maxRunningSteps, isTerminal, render):
         self.mcts = mcts
         self.maxRunningSteps = maxRunningSteps
         self.isTerminal = isTerminal
+        self.render = render
 
     def __call__(self, rootNode):
         # Running
         runningStep = 0
         while runningStep < self.maxRunningSteps:
             currState = list(rootNode.id.values())[0]
+            #self.render(currState)
             if self.isTerminal(currState):
                 break
             nextRoot = self.mcts(rootNode)
@@ -42,8 +44,8 @@ def evaluate(cInit, cBase):
     getActionPrior = GetActionPrior(actionSpace)
     numStateSpace = 4
    
-    initSheepPosition = np.array([180, 180]) 
-    initWolfPosition = np.array([180, 180])
+    initSheepPosition = np.array([90, 90]) 
+    initWolfPosition = np.array([90, 90])
     initSheepVelocity = np.array([0, 0])
     initWolfVelocity = np.array([0, 0])
     initSheepPositionNoise = np.array([40, 60])
@@ -53,11 +55,12 @@ def evaluate(cInit, cBase):
     
     numOneAgentState = 2
     positionIndex = [0, 1]
-    xBoundary = [0, 360]
-    yBoundary = [0, 360]
+    xBoundary = [0, 180]
+    yBoundary = [0, 180]
     checkBoundaryAndAdjust = ag.CheckBoundaryAndAdjust(xBoundary, yBoundary) 
     sheepPositionTransition = ag.SheepPositionTransition(numOneAgentState, positionIndex, checkBoundaryAndAdjust) 
-    wolfPositionTransition = ag.WolfPositionTransition(numOneAgentState, positionIndex, checkBoundaryAndAdjust) 
+    wolfSpeed = 7
+    wolfPositionTransition = ag.WolfPositionTransition(numOneAgentState, positionIndex, checkBoundaryAndAdjust, wolfSpeed) 
     
     numAgent = 2
     sheepId = 0
@@ -70,17 +73,17 @@ def evaluate(cInit, cBase):
     screenColor = [255,255,255]
     circleColorList = [[50,255,50],[50,50,50],[50,50,50],[50,50,50],[50,50,50],[50,50,50],[50,50,50],[50,50,50],[50,50,50]]
     circleSize = 8
-    saveImage = False
+    saveImage = True
     saveImageFile = 'image'
     render = env.Render(numAgent, numOneAgentState, positionIndex, screen, screenColor, circleColorList, circleSize, saveImage, saveImageFile)
 
-    aliveBouns = -0.05
-    deathPenalty = 1
+    aliveBouns = 0.05
+    deathPenalty = -1
     rewardFunction = reward.RewardFunctionTerminalPenalty(sheepId, wolfId, numOneAgentState, positionIndex, aliveBouns, deathPenalty, isTerminal) 
     
     # Hyper-parameters
-    numSimulations = 500
-    maxRunningSteps = 40
+    numSimulations = 600
+    maxRunningSteps = 70
 
     # MCTS algorithm
     # Select child
@@ -94,35 +97,36 @@ def evaluate(cInit, cBase):
 
     # Rollout
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
-    maxRollOutSteps = 40
+    maxRollOutSteps = 50
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transition, rewardFunction, isTerminal)
 
     mcts = MCTS(numSimulations, selectChild, expand, rollout, backup, selectNextRoot)
     
-    runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal)
+    runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal, render)
 
     rootAction = actionSpace[np.random.choice(range(numActionSpace))]
-    numTestingIterations = 100
+    numTestingIterations = 70
     episodeLengths = []
     # currState = initState
     for step in range(numTestingIterations):
+        import datetime
+        print (datetime.datetime.now())
         state, action = None, None
         initState = transition(state, action)
         optimal = math.ceil((np.sqrt(np.sum(np.power(initState[0:2] - initState[2:4], 2))) - minDistance )/10)
         initActionPrior = getActionPrior(initState)
-        rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
+        rootNode = Node(id={rootAction: initState}, num_visited=1, sum_value=0, action_prior=initActionPrior[rootAction], is_expanded=True)
         rootNode = initializeChildren(rootNode)
         episodeLength = runMCTS(rootNode)
-        episodeLengths.append(episodeLength - optimal)
-
+        episodeLengths.append(episodeLength)
     meanEpisodeLength = np.mean(episodeLengths)
     print("mean episode length is", meanEpisodeLength)
     return [meanEpisodeLength]
 
 def main():
     
-    cInit = [1]
-    cBase = [0.01, 1]
+    cInit = [0.1, 1, 10]
+    cBase = [0.01, 0.1, 1]
     modelResults = {(np.log10(init), np.log10(base)): evaluate(init, base) for init, base in it.product(cInit, cBase)}
 
     print("Finished evaluating")
