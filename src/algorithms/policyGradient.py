@@ -11,7 +11,6 @@ class ApproximatePolicy():
         state_ = graph.get_tensor_by_name('inputs/state_:0')
         actionDistribution_ = graph.get_tensor_by_name('outputs/actionDistribution_:0')
         actionDistributionBatch = model.run(actionDistribution_, feed_dict = {state_ : stateBatch})
-        # print(actionDistributionBatch)
         actionIndexBatch = [np.random.choice(range(self.numActionSpace), p = actionDistribution) for actionDistribution in actionDistributionBatch]
         actionBatch = np.array([self.actionSpace[actionIndex] for actionIndex in actionIndexBatch])
         return actionBatch

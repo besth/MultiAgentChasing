@@ -20,3 +20,19 @@ class RewardFunctionTerminalPenalty():
         if self.isTerminal(state):
             reward = reward + self.deathPenalty
         return reward
+
+
+def euclideanDistance(pos1, pos2):
+    return np.sqrt(np.sum(np.square(pos1 - pos2)))
+
+class RewardFunctionCompete():
+    def __init__(self, aliveBouns, deathPenalty, isTerminal):
+        self.aliveBouns = aliveBouns
+        self.deathPenalty = deathPenalty
+        self.isTerminal = isTerminal
+    def __call__(self, state, action):
+        reward = self.aliveBouns
+        if self.isTerminal(state):
+            reward += self.deathPenalty
+            
+        return reward

@@ -87,14 +87,42 @@ def backup(value, node_list):
         node.sum_value += value
         node.num_visited += 1
 
-def selectNextRoot(curr_root):
-    children_visit = [child.num_visited for child in curr_root.children]
-    maxIndex = np.argwhere(children_visit == np.max(children_visit)).flatten()
-    selected_child_index = np.random.choice(maxIndex)
-    selected_child = curr_root.children[selected_child_index]
-    next_root_id = selected_child.id
-    next_root = Node(id = next_root_id, num_visited=0, sum_value=0, is_expanded = False)
-    return next_root
+
+class SelectNextRoot:
+    def __init__(self, transition):
+        self.transition = transition
+    def __call__(self, curr_root):
+        children_visit = [child.num_visited for child in curr_root.children]
+        maxIndex = np.argwhere(children_visit == np.max(children_visit)).flatten()
+        selected_child_index = np.random.choice(maxIndex)
+
+        curr_state = list(curr_root.id.values())[0]
+        action = list(curr_root.children[selected_child_index].id.keys())[0]
+        next_state = self.transition(curr_state, action)
+
+        # selected_child = curr_root.children[selected_child_index]
+        # next_root_id = selected_child.id
+        next_root = Node(id = {action: next_state}, num_visited=0, sum_value=0, is_expanded = False)
+        return next_root
+        # curr_children_visit = np.sum([[child.num_visited for child in root.children] for root in roots], axis=0)
+        # maxIndex = np.argwhere(curr_children_visit == np.max(curr_children_visit)).flatten()
+        # selected_child_index = np.random.choice(maxIndex)
+        
+        # curr_state = list(roots[0].id.values())[0]
+        # action = list(roots[0].children[selected_child_index].id.keys())[0]
+        # next_state = self.transition(curr_state, action)
+
+        # next_root = Node(id={action: next_state}, num_visited=0, sum_value=0, is_expanded = False)
+        # return next_root
+
+# def selectNextRoot(curr_root):
+    # children_visit = [child.num_visited for child in curr_root.children]
+    # maxIndex = np.argwhere(children_visit == np.max(children_visit)).flatten()
+    # selected_child_index = np.random.choice(maxIndex)
+    # selected_child = curr_root.children[selected_child_index]
+    # next_root_id = selected_child.id
+    # next_root = Node(id = next_root_id, num_visited=0, sum_value=0, is_expanded = False)
+    # return next_root
 
 
 class InitializeChildren:

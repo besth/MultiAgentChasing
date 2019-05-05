@@ -99,7 +99,6 @@ class SelectNextRoot:
         action = list(roots[0].children[selected_child_index].id.keys())[0]
         next_state = self.transition(curr_state, action)
 
-        selected_child = roots[0].children[selected_child_index]
         next_root = Node(id={action: next_state}, num_visited=0, sum_value=0, is_expanded = False)
         return next_root
 
