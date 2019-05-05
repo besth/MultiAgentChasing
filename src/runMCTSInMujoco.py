@@ -5,6 +5,8 @@ import math
 from anytree import AnyNode as Node
 from anytree import RenderTree
 
+import skvideo.io
+
 # Local import
 from algorithms.mcts import MCTS, CalculateScore, GetActionPrior, SelectNextRoot, SelectChild, Expand, RollOut, backup, InitializeChildren
 from visualize import draw
@@ -42,9 +44,9 @@ def evaluate(cInit, cBase):
     numAgent = 2
    
     envModelName = 'twoAgents'
-    # renderOn = True
+    renderOn = False
     transitionNoRender = env.TransitionFunctionNaivePredator(envModelName, renderOn=False)
-    transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, renderOn=True)
+    transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, renderOn=renderOn)
 
     minXDis = 0.2
     isTerminal = env.IsTerminal(minXDis)
@@ -55,8 +57,8 @@ def evaluate(cInit, cBase):
     reset = env.Reset(envModelName)
 
     # Hyper-parameters
-    numSimulations = 1
-    maxRunningSteps = 700
+    numSimulations = 200
+    maxRunningSteps = 200
 
     # MCTS algorithm
     # Select child
@@ -69,7 +71,7 @@ def evaluate(cInit, cBase):
 
     # Rollout
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
-    maxRollOutSteps = 50
+    maxRollOutSteps = 100
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transitionNoRender, rewardFunction, isTerminal)
 
     selectNextRoot = SelectNextRoot(transitionWithRender)
@@ -77,20 +79,32 @@ def evaluate(cInit, cBase):
     
     runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal)
 
-    rootAction = actionSpace[np.random.choice(range(numActionSpace))]
-    numTestingIterations = 1
+    # rootAction = actionSpace[np.random.choice(range(numActionSpace))]
+    rootAction = (0, 0)
+    numTestingIterations = 10
     episodeLengths = []
     for step in range(numTestingIterations):
         import datetime
-        print (datetime.datetime.now())
+        print("Testing step:", step, datetime.datetime.now())
         state = reset(numAgent)
         action = (0, 0)
         initState = transitionNoRender(state, action)
         rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
         episodeLength = runMCTS(rootNode)
         episodeLengths.append(episodeLength)
+
+        # Generate video
+        frames = transitionWithRender.frames
+        if len(frames) != 0:
+            print("Generating video")
+            skvideo.io.vwrite("./video.mp4", frames)
+
     meanEpisodeLength = np.mean(episodeLengths)
     print("mean episode length is", meanEpisodeLength)
+
+
+
+
     return [meanEpisodeLength]
 
 def main():
