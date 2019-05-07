@@ -44,7 +44,7 @@ def evaluate(cInit, cBase):
     numAgent = 2
    
     envModelName = 'twoAgents'
-    renderOn = False
+    renderOn = True
     transitionNoRender = env.TransitionFunctionNaivePredator(envModelName, renderOn=False)
     transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, renderOn=renderOn)
 

@@ -31,8 +31,18 @@ class RewardFunctionCompete():
         self.deathPenalty = deathPenalty
         self.isTerminal = isTerminal
     def __call__(self, state, action):
+        velPenalty = -0.1
         reward = self.aliveBouns
+        qVel = np.asarray(state[-2:])
+        qVelMagnitude = np.sqrt(np.sum(np.square(qVel)))
+
+        # Add linear velocity penalty
+        reward += velPenalty * qVelMagnitude
+
         if self.isTerminal(state):
+            # print("state", state)
             reward += self.deathPenalty
+            if qVelMagnitude == 0:
+                reward += self.deathPenalty
             
         return reward

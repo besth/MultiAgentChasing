@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 class Reset():
-    def __init__(self, modelName, qPosInitNoise=3.5, qVelInitNoise=0):
+    def __init__(self, modelName, qPosInitNoise=3, qVelInitNoise=0):
         model = mujoco.load_model_from_path('xmls/' + modelName + '.xml')
         self.simulation = mujoco.MjSim(model)
         self.qPosInitNoise = qPosInitNoise
@@ -16,7 +16,7 @@ class Reset():
 
         qPos = self.simulation.data.qpos + np.random.uniform(low = -self.qPosInitNoise, high = self.qPosInitNoise, size = numQPos)
         qVel = self.simulation.data.qvel + np.random.uniform(low = -self.qVelInitNoise, high = self.qVelInitNoise, size = numQVel)
-        qVel = [0, 0, 0, 0]
+        qVel = [qVel[0], qVel[1], 0, 0]
         # print(qVel)
         self.simulation.data.qpos[:] = qPos
         self.simulation.data.qvel[:] = qVel
