@@ -57,7 +57,7 @@ def evaluate(cInit, cBase):
    
     # Transition
     envModelName = 'twoAgents'
-    renderOn = False
+    renderOn = True
     transitionNoRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=False)
     transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=renderOn)
 
@@ -68,8 +68,8 @@ def evaluate(cInit, cBase):
     reset = env.Reset(envModelName)
 
     # Hyper-parameters
-    numSimulations = 200
-    maxRunningSteps = 10
+    numSimulations = 500
+    maxRunningSteps = 20
 
     # MCTS algorithm
     # Select child
@@ -82,7 +82,7 @@ def evaluate(cInit, cBase):
 
     # Rollout
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
-    maxRollOutSteps = 50
+    maxRollOutSteps = 100
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transitionNoRender, rewardFunction, isTerminal)
 
     selectNextRoot = SelectNextRoot(transitionWithRender)
@@ -103,9 +103,7 @@ def evaluate(cInit, cBase):
         rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
         episodeLength = runMCTS(rootNode)
         # print(RenderTree(rootNode))
-        trajectory = sampleTrajectory(rootNode)
-        f = open("traj.txt", "w+")
-        print(trajectory, file=f)
+
         episodeLengths.append(episodeLength)
         f = open("duration.txt", "a+")
         print(episodeLength, episodeLengths, file=f)

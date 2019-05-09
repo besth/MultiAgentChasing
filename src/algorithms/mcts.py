@@ -3,6 +3,8 @@ import anytree
 from anytree import AnyNode as Node
 from anytree import RenderTree
 
+from testTree import sampleTrajectory
+
 class CalculateScore:
     def __init__(self, c_init, c_base):
         self.c_init = c_init
@@ -153,7 +155,7 @@ class MCTS:
     def __call__(self, curr_root):
         curr_root = self.expand(curr_root)
         for explore_step in range(self.num_simulation):
-            if explore_step == 100:
+            if explore_step % 100 == 0:
                 print("simulation step:", explore_step, "out of", self.num_simulation)
             curr_node = curr_root
             node_path = [curr_node]
@@ -168,6 +170,13 @@ class MCTS:
             leaf_node = self.expand(curr_node)
             value = self.rollout(leaf_node)
             self.backup(value, node_path)
+
+        trajectory = sampleTrajectory(curr_root)
+        f_tree = open("tree.txt", "w+")
+        print(RenderTree(curr_root), file = f_tree)
+        f = open("traj.txt", "w+")
+        print(trajectory, file=f)
+
         next_root = self.select_next_root(curr_root)
         return next_root
 
