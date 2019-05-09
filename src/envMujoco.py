@@ -88,7 +88,7 @@ class TransitionFunctionNaivePredator():
         for i in range(numSimulationFrames):
             self.simulation.step()
             if self.renderOn:
-                frame = self.simulation.render(1024, 1024, camera_name="center", mode="window")
+                frame = self.simulation.render(1024, 1024, camera_name="center")#, mode="window")
                 self.frames.append(frame)
             
             newQPos, newQVel = self.simulation.data.qpos, self.simulation.data.qvel

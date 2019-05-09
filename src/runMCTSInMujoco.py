@@ -16,6 +16,8 @@ from visualize import draw
 import envMujoco as env
 import reward
 
+from testTree import sampleTrajectory
+
 
 class RunMCTS:
     def __init__(self, mcts, maxRunningSteps, isTerminal):
@@ -30,8 +32,8 @@ class RunMCTS:
             print("current running step", runningStep)
             currState = list(rootNode.id.values())[0]
             if self.isTerminal(currState):
-                f = open("tree.txt", "w+")
-                print(RenderTree(rootNode), file=f)
+                # f = open("tree.txt", "w+")
+                # print(RenderTree(rootNode), file=f)
                 break
             nextRoot = self.mcts(rootNode)
             rootNode = nextRoot
@@ -39,6 +41,7 @@ class RunMCTS:
         
         # Output number of steps to reach the target.
         print(runningStep)
+        # print(sampleTrajectory(rootNode))
         return runningStep
 
 def evaluate(cInit, cBase):
@@ -54,7 +57,7 @@ def evaluate(cInit, cBase):
    
     # Transition
     envModelName = 'twoAgents'
-    renderOn = True
+    renderOn = False
     transitionNoRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=False)
     transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=renderOn)
 
@@ -65,7 +68,7 @@ def evaluate(cInit, cBase):
     reset = env.Reset(envModelName)
 
     # Hyper-parameters
-    numSimulations = 2
+    numSimulations = 200
     maxRunningSteps = 10
 
     # MCTS algorithm
@@ -79,7 +82,7 @@ def evaluate(cInit, cBase):
 
     # Rollout
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
-    maxRollOutSteps = 2
+    maxRollOutSteps = 50
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transitionNoRender, rewardFunction, isTerminal)
 
     selectNextRoot = SelectNextRoot(transitionWithRender)
@@ -89,7 +92,7 @@ def evaluate(cInit, cBase):
 
     # rootAction = actionSpace[np.random.choice(range(numActionSpace))]
     rootAction = (0, 0)
-    numTestingIterations = 10
+    numTestingIterations = 1
     episodeLengths = []
     for step in range(numTestingIterations):
         import datetime
@@ -99,12 +102,16 @@ def evaluate(cInit, cBase):
         initState = transitionNoRender(state, action)
         rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
         episodeLength = runMCTS(rootNode)
+        # print(RenderTree(rootNode))
+        trajectory = sampleTrajectory(rootNode)
+        f = open("traj.txt", "w+")
+        print(trajectory, file=f)
         episodeLengths.append(episodeLength)
         f = open("duration.txt", "a+")
         print(episodeLength, episodeLengths, file=f)
 
         # Generate video
-        generateVideo = True
+        generateVideo = renderOn
         if generateVideo:
             frames = transitionWithRender.frames
             if len(frames) != 0:
