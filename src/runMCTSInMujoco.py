@@ -25,8 +25,11 @@ class RunMCTS:
         # Running
         runningStep = 0
         while runningStep < self.maxRunningSteps:
+            print("current running step", runningStep)
             currState = list(rootNode.id.values())[0]
             if self.isTerminal(currState):
+                f = open("tree.txt", "w+")
+                print(RenderTree(rootNode), file=f)
                 break
             nextRoot = self.mcts(rootNode)
             rootNode = nextRoot
@@ -58,7 +61,7 @@ def evaluate(cInit, cBase):
 
     # Hyper-parameters
     numSimulations = 200
-    maxRunningSteps = 200
+    maxRunningSteps = 100
 
     # MCTS algorithm
     # Select child
@@ -92,18 +95,22 @@ def evaluate(cInit, cBase):
         rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
         episodeLength = runMCTS(rootNode)
         episodeLengths.append(episodeLength)
+        f = open("duration.txt", "a+")
+        print(episodeLength, episodeLengths, file=f)
 
         # Generate video
-        frames = transitionWithRender.frames
-        if len(frames) != 0:
-            print("Generating video")
-            skvideo.io.vwrite("./video.mp4", frames)
+        generateVideo = True
+        if generateVideo:
+            frames = transitionWithRender.frames
+            if len(frames) != 0:
+                print("Generating video")
+                skvideo.io.vwrite("./video.mp4", frames)
+
+            # transitionWithRender.frames = []
 
     meanEpisodeLength = np.mean(episodeLengths)
-    print("mean episode length is", meanEpisodeLength)
-
-
-
+    print("mean episode length:", meanEpisodeLength)
+    print("survival rate:", episodeLengths.count(maxRunningSteps) / len(episodeLengths))
 
     return [meanEpisodeLength]
 

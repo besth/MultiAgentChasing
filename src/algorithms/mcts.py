@@ -153,6 +153,8 @@ class MCTS:
     def __call__(self, curr_root):
         curr_root = self.expand(curr_root)
         for explore_step in range(self.num_simulation):
+            if explore_step == 100:
+                print("simulation step:", explore_step, "out of", self.num_simulation)
             curr_node = curr_root
             node_path = [curr_node]
 

@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 class Reset():
-    def __init__(self, modelName, qPosInitNoise=3, qVelInitNoise=0):
+    def __init__(self, modelName, qPosInitNoise=0, qVelInitNoise=5):
         model = mujoco.load_model_from_path('xmls/' + modelName + '.xml')
         self.simulation = mujoco.MjSim(model)
         self.qPosInitNoise = qPosInitNoise
@@ -37,23 +37,45 @@ class TransitionFunctionNaivePredator():
             self.viewer = mujoco.MjViewer(self.simulation)
             self.frames = []
 
-    def __call__(self, allAgentOldState, preyAction, renderOpen = False, numSimulationFrames = 1):
+    def __call__(self, allAgentOldState, preyAction, renderOpen = False, numSimulationFrames = 20):
         numAgent = len(allAgentOldState)
         numQPosEachAgent = int(self.numQPos/numAgent)
         numQVelEachAgent = int(self.numQVel/numAgent)
 
-        # preyState = allAgentOldState[0][numQPosEachAgent: numQPosEachAgent + 2]
-        # predatorState = allAgentOldState[1][numQPosEachAgent: numQPosEachAgent + 2]
+        preyState = allAgentOldState[0][numQPosEachAgent: numQPosEachAgent + 2]
+        predatorState = allAgentOldState[1][numQPosEachAgent: numQPosEachAgent + 2]
 
         # predatorAction = preyState - predatorState
         predatorAction = (0, 0)
+        # print("predator action", predatorAction)
+        predatorActionNorm = np.sum(np.abs(predatorAction))
+        if predatorActionNorm != 0:
+            predatorAction /= predatorActionNorm
+
+        # predatorAction *= 5
+
+        # print("normalized predator action", predatorAction)
+        # print("prey action", preyAction)
+
+        # preyActionNorm = np.sum(np.abs(preyAction))
+        # if preyActionNorm != 0:
+        #     preyAction /= preyActionNorm
+
+        # print("normalized prey action", preyAction)
 
         allAgentAction = np.array(preyAction)
         allAgentAction = np.append(allAgentAction, predatorAction)
-        allAgentAction *= 5
+
 
         allAgentOldQPos = allAgentOldState[:, 0:numQPosEachAgent].flatten()
         allAgentOldQVel = allAgentOldState[:, -numQVelEachAgent:].flatten()
+
+        # print(allAgentAction)
+
+        # Hacking
+        # allAgentOldQVel[2] = predatorAction[0]*10
+        # allAgentOldQVel[3] = predatorAction[1]*10
+        # allAgentAction[-2:] = [0, 0]
 
         self.simulation.data.qpos[:] = allAgentOldQPos
         self.simulation.data.qvel[:] = allAgentOldQVel
@@ -62,12 +84,12 @@ class TransitionFunctionNaivePredator():
         # print(allAgentAction)
         
         for i in range(numSimulationFrames):
+
             self.simulation.step()
             if self.renderOn:
-                # self.viewer.render()
                 frame = self.simulation.render(1024, 1024, camera_name="center")#, mode="window")
                 self.frames.append(frame)
-                # print("get frame", frame)
+
 
                 # self.simulation.render(128, 256)
         newQPos, newQVel = self.simulation.data.qpos, self.simulation.data.qvel
