@@ -5,7 +5,9 @@ import math
 from anytree import AnyNode as Node
 from anytree import RenderTree
 
+import skvideo
 import skvideo.io
+skvideo.setFFmpegPath("/usr/local/bin")
 
 # Local import
 from algorithms.mcts import MCTS, CalculateScore, GetActionPrior, SelectNextRoot, SelectChild, Expand, RollOut, backup, InitializeChildren
@@ -45,14 +47,17 @@ def evaluate(cInit, cBase):
     getActionPrior = GetActionPrior(actionSpace)
     numStateSpace = 4
     numAgent = 2
-   
-    envModelName = 'twoAgents'
-    renderOn = True
-    transitionNoRender = env.TransitionFunctionNaivePredator(envModelName, renderOn=False)
-    transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, renderOn=renderOn)
 
+    # Terminal status
     minXDis = 0.2
     isTerminal = env.IsTerminal(minXDis)
+   
+    # Transition
+    envModelName = 'twoAgents'
+    renderOn = True
+    transitionNoRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=False)
+    transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=renderOn)
+
 
     aliveBouns = -0.05
     deathPenalty = 1
@@ -60,8 +65,8 @@ def evaluate(cInit, cBase):
     reset = env.Reset(envModelName)
 
     # Hyper-parameters
-    numSimulations = 200
-    maxRunningSteps = 100
+    numSimulations = 2
+    maxRunningSteps = 10
 
     # MCTS algorithm
     # Select child
@@ -74,7 +79,7 @@ def evaluate(cInit, cBase):
 
     # Rollout
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
-    maxRollOutSteps = 100
+    maxRollOutSteps = 2
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transitionNoRender, rewardFunction, isTerminal)
 
     selectNextRoot = SelectNextRoot(transitionWithRender)

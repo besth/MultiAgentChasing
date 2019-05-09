@@ -27,7 +27,7 @@ class Reset():
         return startState
 
 class TransitionFunctionNaivePredator():
-    def __init__(self, modelName, renderOn): 
+    def __init__(self, modelName, isTerminal, renderOn): 
         model = mujoco.load_model_from_path('xmls/' + modelName + '.xml')
         self.simulation = mujoco.MjSim(model)
         self.numQPos = len(self.simulation.data.qpos)
@@ -36,6 +36,8 @@ class TransitionFunctionNaivePredator():
         if self.renderOn:
             self.viewer = mujoco.MjViewer(self.simulation)
             self.frames = []
+
+        self.isTerminal = isTerminal
 
     def __call__(self, allAgentOldState, preyAction, renderOpen = False, numSimulationFrames = 20):
         numAgent = len(allAgentOldState)
@@ -84,18 +86,19 @@ class TransitionFunctionNaivePredator():
         # print(allAgentAction)
         
         for i in range(numSimulationFrames):
-
             self.simulation.step()
             if self.renderOn:
-                frame = self.simulation.render(1024, 1024, camera_name="center")#, mode="window")
+                frame = self.simulation.render(1024, 1024, camera_name="center", mode="window")
                 self.frames.append(frame)
+            
+            newQPos, newQVel = self.simulation.data.qpos, self.simulation.data.qvel
+            newXPos = np.concatenate(self.simulation.data.body_xpos[-numAgent: , :numQPosEachAgent])
+            newState = np.array([np.concatenate([newQPos[numQPosEachAgent * agentIndex : numQPosEachAgent * (agentIndex + 1)], newXPos[numQPosEachAgent * agentIndex : numQPosEachAgent * (agentIndex + 1)],
+                        newQVel[numQVelEachAgent * agentIndex : numQVelEachAgent * (agentIndex + 1)]]) for agentIndex in range(numAgent)]) 
+            
+            if self.isTerminal(newState):
+                break
 
-
-                # self.simulation.render(128, 256)
-        newQPos, newQVel = self.simulation.data.qpos, self.simulation.data.qvel
-        newXPos = np.concatenate(self.simulation.data.body_xpos[-numAgent: , :numQPosEachAgent])
-        newState = np.array([np.concatenate([newQPos[numQPosEachAgent * agentIndex : numQPosEachAgent * (agentIndex + 1)], newXPos[numQPosEachAgent * agentIndex : numQPosEachAgent * (agentIndex + 1)],
-            newQVel[numQVelEachAgent * agentIndex : numQVelEachAgent * (agentIndex + 1)]]) for agentIndex in range(numAgent)]) 
         return newState
 
 
