@@ -108,6 +108,7 @@ venv.bak/
 /video
 *.mp4
 test_rollout/
+*.png
 
 #
 .idea
