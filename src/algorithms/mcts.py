@@ -2,6 +2,7 @@ import numpy as np
 import anytree
 from anytree import AnyNode as Node
 from anytree import RenderTree
+from anytree.exporter import DotExporter
 
 from testTree import sampleTrajectory
 
@@ -63,25 +64,53 @@ class Expand:
         return leaf_node
 
 
+def rollout_heuristic(curr_pos, terminal_pos, weight=0.1):
+    # curr_pos = curr_state[0][2:4]
+    # terminal_pos = terminal_state[0][2:4]
+    distance = np.sqrt(np.sum(np.square(curr_pos - terminal_pos)))
+
+    reward = -weight * distance
+    return reward
+
+
 class RollOut:
-    def __init__(self, rollout_policy, max_rollout_step, transition_func, reward_func, is_terminal):
+    def __init__(self, rollout_policy, max_rollout_step, transition_func, reward_func, is_terminal, num_simulations):
         self.transition_func = transition_func
         self.reward_func = reward_func
         self.max_rollout_step = max_rollout_step
         self.rollout_policy = rollout_policy
         self.is_terminal = is_terminal
 
+        # Only used for testing. Delete later
+        self.num_simulations = num_simulations
+
     def __call__(self, leaf_node):
+        reached_terminal = False
+        dis = 16
+        f = open("rollout_total_heuristic_{}_{}.txt".format(dis, self.num_simulations), "a+")
+        print(1, file=f)
         curr_state = list(leaf_node.id.values())[0]
         sum_reward = 0
         for rollout_step in range(self.max_rollout_step):
             action = self.rollout_policy(curr_state)
             sum_reward += self.reward_func(curr_state, action)
             if self.is_terminal(curr_state):
+                f = open("rollout_terminal_heuristic_{}_{}.txt".format(dis, self.num_simulations), "a+")
+                print(1, file=f)
+                reached_terminal = True
                 break
 
             next_state = self.transition_func(curr_state, action)
             curr_state = next_state
+
+        # Heuristics based on distance between the last state of rollout and target state
+        if not reached_terminal:
+            terminal_pos = curr_state[1][2:4]
+            curr_pos = curr_state[0][2:4]
+            heuristic_reward = rollout_heuristic(curr_pos, terminal_pos)
+            # print(curr_pos, terminal_pos, heuristic_reward)
+            sum_reward += heuristic_reward
+
         return sum_reward
 
 def backup(value, node_list):
@@ -100,31 +129,12 @@ class SelectNextRoot:
 
         curr_state = list(curr_root.id.values())[0]
         action = list(curr_root.children[selected_child_index].id.keys())[0]
+        # action = (-10, 0)
         next_state = self.transition(curr_state, action)
 
-        # selected_child = curr_root.children[selected_child_index]
-        # next_root_id = selected_child.id
-        next_root = Node(id = {action: next_state}, num_visited=0, sum_value=0, is_expanded = False)
+        next_root = Node(id={action: next_state}, num_visited=0, sum_value=0, is_expanded = False)
         return next_root
-        # curr_children_visit = np.sum([[child.num_visited for child in root.children] for root in roots], axis=0)
-        # maxIndex = np.argwhere(curr_children_visit == np.max(curr_children_visit)).flatten()
-        # selected_child_index = np.random.choice(maxIndex)
-        
-        # curr_state = list(roots[0].id.values())[0]
-        # action = list(roots[0].children[selected_child_index].id.keys())[0]
-        # next_state = self.transition(curr_state, action)
 
-        # next_root = Node(id={action: next_state}, num_visited=0, sum_value=0, is_expanded = False)
-        # return next_root
-
-# def selectNextRoot(curr_root):
-    # children_visit = [child.num_visited for child in curr_root.children]
-    # maxIndex = np.argwhere(children_visit == np.max(children_visit)).flatten()
-    # selected_child_index = np.random.choice(maxIndex)
-    # selected_child = curr_root.children[selected_child_index]
-    # next_root_id = selected_child.id
-    # next_root = Node(id = next_root_id, num_visited=0, sum_value=0, is_expanded = False)
-    # return next_root
 
 
 class InitializeChildren:
@@ -139,6 +149,7 @@ class InitializeChildren:
 
         for action in self.actionSpace:
             nextState = self.transition(state, action)
+            # print("child initialized", state, action, nextState)
             Node(parent=node, id={action: nextState}, num_visited=0, sum_value=0, action_prior=initActionPrior[action], is_expanded=False)
 
         return node
@@ -171,11 +182,11 @@ class MCTS:
             value = self.rollout(leaf_node)
             self.backup(value, node_path)
 
-        trajectory = sampleTrajectory(curr_root)
-        f_tree = open("tree.txt", "w+")
-        print(RenderTree(curr_root), file = f_tree)
-        f = open("traj.txt", "w+")
-        print(trajectory, file=f)
+        # trajectory = sampleTrajectory(curr_root)
+        # f_tree = open("tree.txt", "w+")
+        # print(RenderTree(curr_root), file = f_tree)
+        # f = open("traj.txt", "w+")
+        # print(trajectory, file=f)
 
         next_root = self.select_next_root(curr_root)
         return next_root

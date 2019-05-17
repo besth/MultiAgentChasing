@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 
 def makeTitle(xlabel, ylabel, graphIndex):
@@ -32,9 +33,28 @@ def draw(data, independetVariablesName, lineVariableIndex=0, xVariableIndex=1):
 
 
 if __name__ == '__main__':
-	# data = {(200,2): [10, -20], (200,4): [20,30], (200,8): [30,40], (200,16):[40,50],
-	# 		(400,2): [15,25], (400,4): [25,35], (400,8): [35,45], (400,16): [45,55],
-	# 		(800,2): [18,28], (800,4): [28,38], (800,8): [38,48], (800,16): [48,58],
-	# 		(1000,2): [22,32], (1000,4): [32,42], (1000,8): [42,52], (1000,16): [52,62]}
-	data = {(128, 2): [10, 20], (128, 4): [10, 30]}
-	draw(data, ['Neuron', 'Layer'])
+	num_sim = [100, 200, 500, 1000, 1500, 2000]
+
+	rollout_reach_target_prob_no_heuristic_distance = [0.954047619047619, 0.9104166666666667, 0.8246078431372549, 0.6477848101265823, 0.46820754716981133, 0.41257692307692306]
+	distance = [1, 2, 4, 8, 12, 16]
+
+	rollout_reach_target_prob_no_heuristic_simulation_distance16 = [0.3172, 0.4126, 0.5807, 0.6829]
+	rollout_reach_target_prob_with_heuristic_distance = [0.9712727272727273, 0.9503888888888888, 0.9300851063829787, 0.8400821917808219, 0.7460222222222223, 0.6762222222222222]
+
+	mean_first_step_distance_to_optimal_no_heuristic = [0.1751776429621799, 0.15343741661206808, 0.10593741661206812, 0.1198498445057071, 0.07234984450570713, 0.01808746112642678]
+	mean_first_step_distance_to_optimal_with_heuristic_test50 = [0.1520751831034078, 0.08320232118156319, 0.08681981340684855, 0.08991983560283538, 0.05064489115399499, 0.05787987560456569]
+	mean_first_step_distance_to_optimal_no_heuristic_test50 = [0.20149913343136788, 0.20104943879628082, 0.140337871969986, 0.11110731892524901, 0.09631981340684856, 0.08108261325336098]
+
+	plt.figure()
+	# plt.plot(distance, prob_heuristic)
+
+	plt.plot(num_sim, mean_first_step_distance_to_optimal_no_heuristic_test50, label="no heuristic")
+	plt.plot(num_sim, mean_first_step_distance_to_optimal_with_heuristic_test50, label="with heuristic")
+	plt.legend()
+	plt.title("Effect of rollout heuristic on first step optimality")
+	# plt.xlabel("Distances")
+	plt.xlabel("Number of simulations")
+	# plt.ylabel("Percentage of rollout reached target")
+	plt.ylabel("Mean distance (Max possible: 0.43; Min possible: 0.00)")
+	plt.savefig("first_step_distance_comparison.png")
+	# plt.show()

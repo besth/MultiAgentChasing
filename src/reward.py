@@ -26,23 +26,13 @@ def euclideanDistance(pos1, pos2):
     return np.sqrt(np.sum(np.square(pos1 - pos2)))
 
 class RewardFunctionCompete():
-    def __init__(self, aliveBouns, deathPenalty, isTerminal):
-        self.aliveBouns = aliveBouns
+    def __init__(self, aliveBonus, deathPenalty, isTerminal):
+        self.aliveBonus = aliveBonus
         self.deathPenalty = deathPenalty
         self.isTerminal = isTerminal
     def __call__(self, state, action):
-        # velPenalty = -0.1
-        reward = self.aliveBouns
-        # qVel = np.asarray(state[-2:])
-        # qVelMagnitude = np.sqrt(np.sum(np.square(qVel)))
-
-        # Add linear velocity penalty
-        # reward += velPenalty * qVelMagnitude
-
+        reward = self.aliveBonus
         if self.isTerminal(state):
-            # print("state", state)
             reward += self.deathPenalty
-            # if qVelMagnitude != 0:
-                # reward += velPenalty * qVelMagnitude
-            
+
         return reward
