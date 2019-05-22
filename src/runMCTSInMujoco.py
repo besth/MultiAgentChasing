@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import itertools as it
 import math
@@ -16,7 +17,6 @@ from visualize import draw
 import envMujoco as env
 import reward
 
-from testTree import sampleTrajectory
 import click
 
 
@@ -47,24 +47,23 @@ class RunMCTS:
             #     if list(child.id.keys())[0] == (10, 0):
             #         # print(child)
             #         optimalNextPosition = list(child.id.values())[0][0][2:4]
-            optimalNextPosition = list(rootNode.children[0].id.values())[0][0][2:4]
+            # optimalNextPosition = list(rootNode.children[0].id.values())[0][0][2:4]
             actualNextPosition = list(nextRoot.id.values())[0][0][2:4]
-            distance = compute_distance(optimalNextPosition, actualNextPosition)
-            # print(optimalNextPosition, actualNextPosition, distance)
+            targetPosition = (9, 0)
+            distance = compute_distance(targetPosition, actualNextPosition)
 
+            print(runningStep, distance)
             rootNode = nextRoot
             runningStep += 1
         
         # Output number of steps to reach the target.
-        print(runningStep, distance)
         return runningStep, distance
 
-#@click.command()
-#@click.option('--numSimulations', default=200, help='number of simulations each MCTS step runs.')
-#@click.argument('cInit')
-#@click.argument('cBase')
-def evaluate(cInit, cBase, numSimulations):
+
+def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations):
     actionSpace = [(10,0),(7,7),(0,10),(-7,7),(-10,0),(-7,-7),(0,-10),(7,-7)]
+    # actionSpace = list(np.array(actionSpace))
+
     numActionSpace = len(actionSpace)
     getActionPrior = GetActionPrior(actionSpace)
     numStateSpace = 4
@@ -82,14 +81,14 @@ def evaluate(cInit, cBase, numSimulations):
     transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=renderOn, numSimulationFrames=numSimulationFrames)
 
 
-    aliveBouns = -0.05
-    deathPenalty = 1
+    aliveBouns = 0.05
+    deathPenalty = -1
     rewardFunction = reward.RewardFunctionCompete(aliveBouns, deathPenalty, isTerminal)
     reset = env.Reset(envModelName)
 
     # Hyper-parameters
     numSimulations = numSimulations
-    maxRunningSteps = 1
+    maxRunningSteps = maxRunningSteps
 
     # MCTS algorithm
     # Select child
@@ -101,9 +100,10 @@ def evaluate(cInit, cBase, numSimulations):
     expand = Expand(transitionNoRender, isTerminal, initializeChildren)
 
     # Rollout
+    useHeuristic = True
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
     maxRollOutSteps = 20
-    rollout = RollOut(rolloutPolicy, maxRollOutSteps, transitionNoRender, rewardFunction, isTerminal, numSimulations)
+    rollout = RollOut(rolloutPolicy, maxRollOutSteps, transitionNoRender, rewardFunction, isTerminal, numSimulations, useHeuristic)
 
     selectNextRoot = SelectNextRoot(transitionWithRender)
     mcts = MCTS(numSimulations, selectChild, expand, rollout, backup, selectNextRoot)
@@ -111,9 +111,9 @@ def evaluate(cInit, cBase, numSimulations):
     runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal)
 
     rootAction = (0, 0)
-    numTestingIterations = 50
+    numTestingIterations = numTestingIterations
     episodeLengths = []
-    firstStepDistances = []
+    distancesToTarget = []
     for step in range(numTestingIterations):
         import datetime
         print("Testing step:", step, datetime.datetime.now())
@@ -121,14 +121,13 @@ def evaluate(cInit, cBase, numSimulations):
         action = (0, 0)
         initState = transitionNoRender(state, action)
         rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
-        episodeLength, firstStepDistance = runMCTS(rootNode)
-        # print(RenderTree(rootNode))
+        episodeLength, distanceToTarget = runMCTS(rootNode)
 
         # Record episode length
         episodeLengths.append(episodeLength)
 
         # Record first step distance
-        firstStepDistances.append(firstStepDistance)
+        distancesToTarget.append(distanceToTarget)
 
         # Generate video
         generateVideo = renderOn
@@ -141,10 +140,14 @@ def evaluate(cInit, cBase, numSimulations):
             # transitionWithRender.frames = []
 
     meanEpisodeLength = np.mean(episodeLengths)
-    meanFirstStepDistance = np.mean(firstStepDistances)
+    meanDistanceToTarget = np.mean(distancesToTarget)
     # print("mean episode length:", meanEpisodeLength)
     # f = open("duration.txt", "a+")
-    # f = open("distance.txt", "a+")
+    if useHeuristic:
+        f = open("data/small_action_distance_heuristic_sim{}.txt".format(numSimulations), "a+")
+    else:
+        f = open("data/small_action_distance_no_heuristic_sim{}.txt".format(numSimulations), "a+")
+    print("mean distance to target after running {} steps: ".format(maxRunningSteps), meanDistanceToTarget, file=f)
     # print("mean episode length:", meanEpisodeLength, "simulation number:", numSimulations, file=f)
     # print("survival rate:", episodeLengths.count(maxRunningSteps) / len(episodeLengths))
 
@@ -171,12 +174,17 @@ def calc_rollout_terminal_prob(distances, num_simulations):
 
 
 @click.command()
-@click.option('--num-simulations', default=200, help='number of simulations each MCTS step runs.')
-def main(num_simulations):
+@click.option('--num-simulations', default=1, help='number of simulations each MCTS step runs.')
+@click.option('--max-running-steps', default=20, help='maximum number of steps in each episode.')
+@click.option('--num-trials', default=1, help='number of testing iterations to run')
+def main(num_simulations, max_running_steps, num_trials):
+    # create directories to store data
+    if not os.path.exists('data/'):
+        os.mkdir('data/', mode=0o777)
 
     cInit = [1]
     cBase = [100]
-    modelResults = {(np.log10(init), np.log10(base)): evaluate(init, base, num_simulations) for init, base in it.product(cInit, cBase)}
+    modelResults = {(np.log10(init), np.log10(base)): evaluate(init, base, num_simulations, max_running_steps, num_trials) for init, base in it.product(cInit, cBase)}
     print("Finished evaluating")
 
     # Visualize

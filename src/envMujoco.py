@@ -19,9 +19,8 @@ class Reset():
         qPos = self.simulation.data.qpos + np.random.uniform(low = -self.qPosInitNoise, high = self.qPosInitNoise, size = numQPos)
         qVel = self.simulation.data.qvel + np.random.uniform(low = -self.qVelInitNoise, high = self.qVelInitNoise, size = numQVel)
 
-        # print(qPos)
+        # only keep the initial randomness of position.
         qVel = [qVel[0], qVel[1], 0, 0]
-        # qPos[-3:] = oldQPos[-3:]
 
         # print(qVel)
         self.simulation.data.qpos[:] = qPos
@@ -51,34 +50,16 @@ class TransitionFunctionNaivePredator():
         numQPosEachAgent = int(self.numQPos/numAgent)
         numQVelEachAgent = int(self.numQVel/numAgent)
 
-        # print("prey action", preyAction)
-
         preyState = allAgentOldState[0][numQPosEachAgent: numQPosEachAgent + 2]
         predatorState = allAgentOldState[1][numQPosEachAgent: numQPosEachAgent + 2]
 
         predatorAction = preyState - predatorState
-        predatorAction = (0, 0)
-        # print("predator action", predatorAction)
         predatorActionNorm = np.sum(np.abs(predatorAction))
         if predatorActionNorm != 0:
             predatorAction /= predatorActionNorm
 
-        # predatorAction *= 5
-
-        # print("normalized predator action", predatorAction)
-        # print("prey action", preyAction)
-
-        # preyActionNorm = np.sum(np.abs(preyAction))
-        # if preyActionNorm != 0:
-        #     preyAction /= preyActionNorm
-
-        # print("normalized prey action", preyAction)
-
-        # preyAction = (10,0)
-
         allAgentAction = np.array(preyAction)
         allAgentAction = np.append(allAgentAction, predatorAction)
-
 
         allAgentOldQPos = allAgentOldState[:, 0:numQPosEachAgent].flatten()
         allAgentOldQVel = allAgentOldState[:, -numQVelEachAgent:].flatten()

@@ -1,0 +1,22 @@
+mean distance to target after running 1 steps:  15.894153140296517
+mean distance to target after running 2 steps:  15.59979927136164
+mean distance to target after running 3 steps:  15.108228363191154
+mean distance to target after running 4 steps:  14.340013824059934
+mean distance to target after running 5 steps:  13.340503247828988
+mean distance to target after running 6 steps:  12.23333840036797
+mean distance to target after running 7 steps:  10.930984877377222
+mean distance to target after running 8 steps:  9.93296342721213
+mean distance to target after running 9 steps:  8.50364800877818
+mean distance to target after running 10 steps:  6.464630606194635
+mean distance to target after running 11 steps:  4.8988470384285225
+mean distance to target after running 17 steps:  0.356260238750292
+mean distance to target after running 18 steps:  0.35897913220596983
+mean distance to target after running 16 steps:  0.36074617097374884
+mean distance to target after running 13 steps:  1.399252337821949
+mean distance to target after running 12 steps:  3.431049262406836
+mean distance to target after running 20 steps:  0.3589081067628006
+mean distance to target after running 15 steps:  0.44163637120472915
+mean distance to target after running 19 steps:  0.3616077968394601
+mean distance to target after running 14 steps:  0.5307849863334508
+
+12.23333840036797, 10.930984877377222, 9.93296342721213, 8.50364800877818, 6.464630606194635, 4.8988470384285225, 3.431049262406836, 1.399252337821949, 0.5307849863334508, 0.44163637120472915, 0.36074617097374884, 0.356260238750292, 0.35897913220596983, 0.3616077968394601, 0.3589081067628006

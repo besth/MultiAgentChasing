@@ -104,11 +104,12 @@ venv.bak/
 .mypy_cache/
 
 # data
-/plots
+# /plots
 /video
 *.mp4
 test_rollout/
 *.png
+/data
 
 #
 .idea
