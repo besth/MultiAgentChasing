@@ -41,24 +41,12 @@ class RunMCTS:
                 break
             nextRoot = self.mcts(rootNode)
 
-            # Test the optimality of first step.
-            # print(rootNode.children)
-            # for child in rootNode.children:
-            #     if list(child.id.keys())[0] == (10, 0):
-            #         # print(child)
-            #         optimalNextPosition = list(child.id.values())[0][0][2:4]
-            # optimalNextPosition = list(rootNode.children[0].id.values())[0][0][2:4]
-            actualNextPosition = list(nextRoot.id.values())[0][0][2:4]
-            targetPosition = (9, 0)
-            distance = compute_distance(targetPosition, actualNextPosition)
-            # print("next root id", nextRoot.id)
-
-            print(runningStep, distance)
+            print(runningStep)
             rootNode = nextRoot
             runningStep += 1
         
         # Output number of steps to reach the target.
-        return runningStep, distance
+        return runningStep
 
 
 def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations):
@@ -122,13 +110,10 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
         action = (0, 0)
         initState = transitionNoRender(state, action)
         rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
-        episodeLength, distanceToTarget = runMCTS(rootNode)
+        episodeLength = runMCTS(rootNode)
 
         # Record episode length
         episodeLengths.append(episodeLength)
-
-        # Record first step distance
-        distancesToTarget.append(distanceToTarget)
 
         # Generate video
         generateVideo = renderOn
@@ -138,19 +123,8 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
                 print("Generating video")
                 skvideo.io.vwrite("./video_with_heuristic.mp4", frames)
 
-            # transitionWithRender.frames = []
 
     meanEpisodeLength = np.mean(episodeLengths)
-    meanDistanceToTarget = np.mean(distancesToTarget)
-    # print("mean episode length:", meanEpisodeLength)
-    # f = open("duration.txt", "a+")
-    # if useHeuristic:
-    #     f = open("data/small_action_distance_heuristic_sim{}.txt".format(numSimulations), "a+")
-    # else:
-    #     f = open("data/small_action_distance_no_heuristic_sim{}.txt".format(numSimulations), "a+")
-    # print("mean distance to target after running {} steps: ".format(maxRunningSteps), meanDistanceToTarget, file=f)
-    # print("mean episode length:", meanEpisodeLength, "simulation number:", numSimulations, file=f)
-    # print("survival rate:", episodeLengths.count(maxRunningSteps) / len(episodeLengths))
 
     return [meanEpisodeLength]
 
@@ -188,16 +162,6 @@ def main(num_simulations, max_running_steps, num_trials):
     modelResults = {(np.log10(init), np.log10(base)): evaluate(init, base, num_simulations, max_running_steps, num_trials) for init, base in it.product(cInit, cBase)}
     print("Finished evaluating")
 
-    # Visualize
-    # independentVariableNames = ['cInit', 'cBase']
-    # draw(modelResults, independentVariableNames)
-
-    # Generate test results.
-    # distances = [1, 2, 4, 8, 12, 16]
-    # distances = [16]
-    # probs = calc_rollout_terminal_prob(distances, num_simulations)
-    # f = open("rollout_prob_heuristic.txt", "a+")
-    # print("prob", probs, "number of simulations", num_simulations, file=f)
 
 if __name__ == "__main__":
     main()
