@@ -51,6 +51,7 @@ class RunMCTS:
             actualNextPosition = list(nextRoot.id.values())[0][0][2:4]
             targetPosition = (9, 0)
             distance = compute_distance(targetPosition, actualNextPosition)
+            # print("next root id", nextRoot.id)
 
             print(runningStep, distance)
             rootNode = nextRoot
@@ -61,8 +62,8 @@ class RunMCTS:
 
 
 def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations):
-    actionSpace = [(10,0),(7,7),(0,10),(-7,7),(-10,0),(-7,-7),(0,-10),(7,-7)]
-    # actionSpace = list(np.array(actionSpace))
+    # actionSpace = [(10, 0), (7, 7), (0, 10), (-7, 7), (-10, 0), (-7, -7), (0, -10), (7, -7)]
+    actionSpace = [(10, 0), (-10, 0), (0, 10), (0, -10)]
 
     numActionSpace = len(actionSpace)
     getActionPrior = GetActionPrior(actionSpace)
@@ -100,9 +101,9 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
     expand = Expand(transitionNoRender, isTerminal, initializeChildren)
 
     # Rollout
-    useHeuristic = True
+    useHeuristic = False
     rolloutPolicy = lambda state: actionSpace[np.random.choice(range(numActionSpace))]
-    maxRollOutSteps = 20
+    maxRollOutSteps = 10
     rollout = RollOut(rolloutPolicy, maxRollOutSteps, transitionNoRender, rewardFunction, isTerminal, numSimulations, useHeuristic)
 
     selectNextRoot = SelectNextRoot(transitionWithRender)
@@ -143,11 +144,11 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
     meanDistanceToTarget = np.mean(distancesToTarget)
     # print("mean episode length:", meanEpisodeLength)
     # f = open("duration.txt", "a+")
-    if useHeuristic:
-        f = open("data/small_action_distance_heuristic_sim{}.txt".format(numSimulations), "a+")
-    else:
-        f = open("data/small_action_distance_no_heuristic_sim{}.txt".format(numSimulations), "a+")
-    print("mean distance to target after running {} steps: ".format(maxRunningSteps), meanDistanceToTarget, file=f)
+    # if useHeuristic:
+    #     f = open("data/small_action_distance_heuristic_sim{}.txt".format(numSimulations), "a+")
+    # else:
+    #     f = open("data/small_action_distance_no_heuristic_sim{}.txt".format(numSimulations), "a+")
+    # print("mean distance to target after running {} steps: ".format(maxRunningSteps), meanDistanceToTarget, file=f)
     # print("mean episode length:", meanEpisodeLength, "simulation number:", numSimulations, file=f)
     # print("survival rate:", episodeLengths.count(maxRunningSteps) / len(episodeLengths))
 
@@ -174,9 +175,9 @@ def calc_rollout_terminal_prob(distances, num_simulations):
 
 
 @click.command()
-@click.option('--num-simulations', default=1, help='number of simulations each MCTS step runs.')
-@click.option('--max-running-steps', default=20, help='maximum number of steps in each episode.')
-@click.option('--num-trials', default=1, help='number of testing iterations to run')
+@click.option('--num-simulations', default=500, help='number of simulations each MCTS step runs.')
+@click.option('--max-running-steps', default=1, help='maximum number of steps in each episode.')
+@click.option('--num-trials', default=100, help='number of testing iterations to run')
 def main(num_simulations, max_running_steps, num_trials):
     # create directories to store data
     if not os.path.exists('data/'):

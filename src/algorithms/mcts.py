@@ -183,13 +183,11 @@ class MCTS:
             value = self.rollout(leaf_node)
             self.backup(value, node_path)
 
-        # trajectory = sampleTrajectory(curr_root)
-        # f_tree = open("tree.txt", "w+")
-        # print(RenderTree(curr_root), file = f_tree)
-        # f = open("traj.txt", "w+")
-        # print(trajectory, file=f)
-
         next_root = self.select_next_root(curr_root)
+        action_taken = list(next_root.id.keys())[0]
+        dis = 2
+        f = open("data/action_distribution_sim{}_vdis{}".format(self.num_simulation, dis), "a+")
+        print(action_taken, file=f)
         return next_root
 
 def main():
