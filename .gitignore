@@ -113,6 +113,6 @@ test_rollout/
 
 #
 .idea
-.DS_Stores
-src/.DS_Stores
+.DS_Store
+src/.DS_Store
 
