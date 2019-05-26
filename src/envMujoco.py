@@ -14,13 +14,13 @@ class Reset():
         numQPosEachAgent = int(numQPos/numAgent)
         numQVelEachAgent = int(numQVel/numAgent)
 
-        oldQPos = self.simulation.data.qpos
+        # oldQPos = self.simulation.data.qpos
 
         qPos = self.simulation.data.qpos + np.random.uniform(low = -self.qPosInitNoise, high = self.qPosInitNoise, size = numQPos)
         qVel = self.simulation.data.qvel + np.random.uniform(low = -self.qVelInitNoise, high = self.qVelInitNoise, size = numQVel)
 
         # only keep the initial randomness of position.
-        qVel = [qVel[0], qVel[1], 0, 0]
+        # qVel = [qVel[0], qVel[1], 0, 0]
 
         # print(qVel)
         self.simulation.data.qpos[:] = qPos

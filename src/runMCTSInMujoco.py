@@ -20,9 +20,9 @@ import reward
 import click
 
 
-
 def compute_distance(pos1, pos2):
     return np.sqrt(np.sum(np.square(pos1 - pos2)))
+
 
 class RunMCTS:
     def __init__(self, mcts, maxRunningSteps, isTerminal):
@@ -34,7 +34,7 @@ class RunMCTS:
         # Running
         runningStep = 0
         while runningStep < self.maxRunningSteps:
-            print("current running step", runningStep)
+            print("(MCTS) current running step", runningStep)
             currState = list(rootNode.id.values())[0]
 
             if self.isTerminal(currState):
@@ -49,9 +49,37 @@ class RunMCTS:
         return runningStep
 
 
-def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations):
-    # actionSpace = [(10, 0), (7, 7), (0, 10), (-7, 7), (-10, 0), (-7, -7), (0, -10), (7, -7)]
-    actionSpace = [(10, 0), (-10, 0), (0, 10), (0, -10)]
+class RunRandom:
+    def __init__(self, maxRunningSteps, isTerminal, actionSpace, transition_func):
+        self.maxRunningSteps = maxRunningSteps
+        self.isTerminal = isTerminal
+        self.actionSpace = actionSpace
+        self.transition_func = transition_func
+
+    def __call__(self, initState):
+        # Running
+        runningStep = 0
+        currState = initState
+        while runningStep < self.maxRunningSteps:
+            print("(Random) current running step", runningStep)
+
+            if self.isTerminal(currState):
+                break
+
+            actionIndex = np.random.choice(range(len(self.actionSpace)))
+            action = self.actionSpace[actionIndex]
+            nextState = self.transition_func(currState, action)
+
+            currState = nextState
+            runningStep += 1
+
+        # Output number of steps to reach the target.
+        return runningStep
+
+
+def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations, algorithm, render, killzone_radius):
+    actionSpace = [(10, 0), (7, 7), (0, 10), (-7, 7), (-10, 0), (-7, -7), (0, -10), (7, -7)]
+    # actionSpace = [(10, 0), (-10, 0), (0, 10), (0, -10)]
 
     numActionSpace = len(actionSpace)
     getActionPrior = GetActionPrior(actionSpace)
@@ -59,12 +87,12 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
     numAgent = 2
 
     # Terminal status
-    minXDis = 0.2
+    minXDis = killzone_radius
     isTerminal = env.IsTerminal(minXDis)
    
     # Transition
     envModelName = 'twoAgents'
-    renderOn = False
+    renderOn = render
     numSimulationFrames = 20
     transitionNoRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=False, numSimulationFrames=numSimulationFrames)
     transitionWithRender = env.TransitionFunctionNaivePredator(envModelName, isTerminal, renderOn=renderOn, numSimulationFrames=numSimulationFrames)
@@ -98,6 +126,7 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
     mcts = MCTS(numSimulations, selectChild, expand, rollout, backup, selectNextRoot)
     
     runMCTS = RunMCTS(mcts, maxRunningSteps, isTerminal)
+    runRandom = RunRandom(maxRunningSteps, isTerminal, actionSpace, transitionNoRender)
 
     rootAction = (0, 0)
     numTestingIterations = numTestingIterations
@@ -109,8 +138,12 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
         state = reset(numAgent)
         action = (0, 0)
         initState = transitionNoRender(state, action)
-        rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
-        episodeLength = runMCTS(rootNode)
+
+        if algorithm == "mcts":
+            rootNode = Node(id={rootAction: initState}, num_visited=0, sum_value=0, is_expanded=True)
+            episodeLength = runMCTS(rootNode)
+        else:
+            episodeLength = runRandom(initState)
 
         # Record episode length
         episodeLengths.append(episodeLength)
@@ -121,11 +154,12 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
             frames = transitionWithRender.frames
             if len(frames) != 0:
                 print("Generating video")
-                skvideo.io.vwrite("./video_with_heuristic.mp4", frames)
-
+                skvideo.io.vwrite("./video.mp4", frames)
 
     meanEpisodeLength = np.mean(episodeLengths)
-
+    dis = 9
+    f = open("data/corner_mean_episode_length_{}_sim{}".format(algorithm, numSimulations), "a+")
+    print("Mean episode length at distance {} is: {}".format(dis, meanEpisodeLength), file=f)
     return [meanEpisodeLength]
 
 
@@ -149,17 +183,27 @@ def calc_rollout_terminal_prob(distances, num_simulations):
 
 
 @click.command()
-@click.option('--num-simulations', default=500, help='number of simulations each MCTS step runs.')
-@click.option('--max-running-steps', default=1, help='maximum number of steps in each episode.')
-@click.option('--num-trials', default=100, help='number of testing iterations to run')
-def main(num_simulations, max_running_steps, num_trials):
+@click.option('--num-simulations', default=250, help='number of simulations each MCTS step runs.')
+@click.option('--max-running-steps', default=100, help='maximum number of steps in each episode.')
+@click.option('--num-trials', default=50, help='number of testing iterations to run')
+@click.option('--algorithm', default='mcts', help='algorithm to run: mcts or random')
+@click.option('--render', default=False, help='whether to render')
+@click.option('--killzone-radius', default=0.2, help='max distance between the two agents so that they collide with each other')
+def main(num_simulations, max_running_steps, num_trials, algorithm, render, killzone_radius):
     # create directories to store data
     if not os.path.exists('data/'):
         os.mkdir('data/', mode=0o777)
 
     cInit = [1]
     cBase = [100]
-    modelResults = {(np.log10(init), np.log10(base)): evaluate(init, base, num_simulations, max_running_steps, num_trials) for init, base in it.product(cInit, cBase)}
+    modelResults = {(np.log10(init), np.log10(base)): evaluate(init,
+                                                               base,
+                                                               num_simulations,
+                                                               max_running_steps,
+                                                               num_trials,
+                                                               algorithm,
+                                                               render,
+                                                               killzone_radius) for init, base in it.product(cInit, cBase)}
     print("Finished evaluating")
 
 

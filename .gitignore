@@ -109,7 +109,7 @@ venv.bak/
 *.mp4
 test_rollout/
 *.png
-/data
+
 
 #
 .idea
