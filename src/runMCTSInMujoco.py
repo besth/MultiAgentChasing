@@ -101,7 +101,6 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
     aliveBouns = 0.05
     deathPenalty = -1
     rewardFunction = reward.RewardFunctionCompete(aliveBouns, deathPenalty, isTerminal)
-    reset = env.Reset(envModelName)
 
     # Hyper-parameters
     numSimulations = numSimulations
@@ -135,6 +134,7 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
     for step in range(numTestingIterations):
         import datetime
         print("Testing step:", step, datetime.datetime.now())
+        reset = env.Reset(envModelName)
         state = reset(numAgent)
         action = (0, 0)
         initState = transitionNoRender(state, action)
