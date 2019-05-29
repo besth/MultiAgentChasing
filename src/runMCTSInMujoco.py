@@ -157,9 +157,9 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
                 skvideo.io.vwrite("./video.mp4", frames)
 
     meanEpisodeLength = np.mean(episodeLengths)
-    dis = 9
-    f = open("data/corner_mean_episode_length_{}_sim{}".format(algorithm, numSimulations), "a+")
-    print("Mean episode length at distance {} is: {}".format(dis, meanEpisodeLength), file=f)
+
+    f = open("data/corner_mean_episode_length_{}_sim{}_dis3_killzone".format(algorithm, numSimulations), "a+")
+    print("Mean episode length with killzone size {} is: {}".format(killzone_radius, meanEpisodeLength), file=f)
     return [meanEpisodeLength]
 
 
@@ -183,12 +183,12 @@ def calc_rollout_terminal_prob(distances, num_simulations):
 
 
 @click.command()
-@click.option('--num-simulations', default=250, help='number of simulations each MCTS step runs.')
-@click.option('--max-running-steps', default=100, help='maximum number of steps in each episode.')
+@click.option('--num-simulations', default=1, help='number of simulations each MCTS step runs.')
+@click.option('--max-running-steps', default=1, help='maximum number of steps in each episode.')
 @click.option('--num-trials', default=50, help='number of testing iterations to run')
 @click.option('--algorithm', default='mcts', help='algorithm to run: mcts or random')
 @click.option('--render', default=False, help='whether to render')
-@click.option('--killzone-radius', default=0.2, help='max distance between the two agents so that they collide with each other')
+@click.option('--killzone-radius', default=0.7, help='max distance between the two agents so that they collide with each other')
 def main(num_simulations, max_running_steps, num_trials, algorithm, render, killzone_radius):
     # create directories to store data
     if not os.path.exists('data/'):

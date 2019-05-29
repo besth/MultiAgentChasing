@@ -63,9 +63,9 @@ def plot_action_probability_with_simulation(action_dist):
 
 
 
-if __name__ == "__main__":
-    action_dist = extract_action_probability()
-    plot_action_probability_with_simulation(action_dist)
+#if __name__ == "__main__":
+#    action_dist = extract_action_probability()
+#    plot_action_probability_with_simulation(action_dist)
 
 
 # num_sim = [100, 200, 500, 1000, 1500, 2000]
@@ -108,22 +108,49 @@ if __name__ == "__main__":
 # mean_distance_to_target_no_heuristic_small_action_sim250 = [15.946973720770547, 15.876708654930708, 15.55134601990904, 15.68, 14.79, 14.36, 13.63, 12.44, 12.23, 10.76, 11.03, 8.66, 7.88, 6.03, 5.41, 4.52, 2.33, 5.06, 3.10, 3.20]
 # mean_distance_to_target_optimal_small_action = [15.5125, 14.89375, 14.025, 12.90625, 11.5375, 9.91875, 8.05, 5.93125, 3.5625, 0.94375, 0.39, 0,0,0,0,0,0,0,0,0]
 #
-#
-# plt.figure()
+
+
+
+# Test mean episode length with respect to distance
+#dis = [2,4,6,8,9]
+#dis2 = np.dot(dis, np.sqrt(2))
+#mean_ep_len_wall_random = [76.98, 80.34, 82.64, 82.28, 81.98]
+#mean_ep_len_corner_random = [82.56, 80.58, 87.8, 89.96, 90.26]
+#plt.figure()
+#plt.plot(dis, mean_ep_len_wall_random, label="to wall")
+#plt.plot(dis2, mean_ep_len_corner_random, label="to corner")
 # # print(len(mean_distance_to_target_no_heuristic_small_action_sim250))
 # # plt.plot(distance, prob_heuristic)
 #
 # plt.plot(max_steps_small_action, mean_distance_to_target_no_heuristic_small_action_sim250, label="no heuristic")
 # plt.plot(max_steps_small_action, mean_distance_to_target_heuristic_small_action_sim250, label="with heuristic")
 # plt.plot(max_steps_small_action, mean_distance_to_target_optimal_small_action, label="optimal")
-# plt.legend()
-# plt.title("Effect of rollout heuristic on distance to target (sim=250)")
-# # plt.xlabel("Distances")
+#plt.legend()
+#plt.title("mean episode length of random policy")
+#plt.xlabel("Distances")
+#plt.ylabel("mean episode length (max=100)")
 # plt.xlabel("Number steps")
 # plt.ylabel("Distance to target ([0, 16])")
 # # plt.ylabel("Mean distance (Max possible: 0.43; Min possible: 0.00)")
 # # plt.ylabel("Mean episode duration. (Min: 7)")
-#
-# if not os.path.exists("plots/"):
-#     os.mkdir("plots")
-# plt.savefig("plots/rollout_distance_to_target_diff_steps_comparison_sim250_small_actions.png")
+
+
+# Test killzone size effect
+sizes = [0.2, 0.4, 0.6, 0.7, 0.8, 1.0]
+random_survival_time_max10 = [7.28, 5.8, 3.96, 2.88, 2.52, 1.64]
+mcts_survival_time_max10 = [10.0, 10.0, 10.0, 10.0, 4.0, 3.8]
+plt.figure()
+plt.plot(sizes, random_survival_time_max10, label="random")
+plt.plot(sizes, mcts_survival_time_max10, label="mcts")
+
+plt.legend()
+plt.title("mean episode length(sim=250)")
+plt.xlabel("killzone sizes")
+plt.ylabel("mean episode length (max=10)")
+
+
+
+
+if not os.path.exists("plots/"):
+    os.mkdir("plots")
+plt.savefig("plots/killzone_size_comparison.png")

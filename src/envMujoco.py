@@ -58,6 +58,7 @@ class TransitionFunctionNaivePredator():
         if predatorActionNorm != 0:
             predatorAction /= predatorActionNorm
 
+        predatorAction *= 5
         allAgentAction = np.array(preyAction)
         allAgentAction = np.append(allAgentAction, predatorAction)
 

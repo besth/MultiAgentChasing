@@ -1,0 +1,11 @@
+1. Test the effect of killzone size on the corner.
+- settings:
+    - positions: prey: (9, 9). predator: (7.5, 7.5). Predator action *= 5 position difference.
+
+- steps:
+    1. tested with killzone size = [0.2, 0.4, 0.6, 0.7, 0.8, 1.0]. Max-steps=10. Rollout=10. num-sim=250. num-tests=50.
+    2. Threshold size ~0.7/0.8. Then increase the num-sim to 1000 for the two sizes next to the threshold. Make sure the
+        simulation number does not matter (i.e. the threshold size stays the same).
+    3. compare: (1). With small killzone, mcts can always run out of corner, while random does not. So significantly better performance.
+                (2). With large killzone, mcts will run towards the corner. Max survival time is 4. It should be slightly better than random.
+                (With increased number of tests)
