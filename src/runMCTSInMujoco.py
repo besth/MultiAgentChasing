@@ -183,12 +183,12 @@ def calc_rollout_terminal_prob(distances, num_simulations):
 
 
 @click.command()
-@click.option('--num-simulations', default=1, help='number of simulations each MCTS step runs.')
-@click.option('--max-running-steps', default=1, help='maximum number of steps in each episode.')
-@click.option('--num-trials', default=50, help='number of testing iterations to run')
+@click.option('--num-simulations', default=100, help='number of simulations each MCTS step runs.')
+@click.option('--max-running-steps', default=25, help='maximum number of steps in each episode.')
+@click.option('--num-trials', default=1, help='number of testing iterations to run')
 @click.option('--algorithm', default='mcts', help='algorithm to run: mcts or random')
-@click.option('--render', default=False, help='whether to render')
-@click.option('--killzone-radius', default=0.7, help='max distance between the two agents so that they collide with each other')
+@click.option('--render', default=True, help='whether to render')
+@click.option('--killzone-radius', default=0.2, help='max distance between the two agents so that they collide with each other')
 def main(num_simulations, max_running_steps, num_trials, algorithm, render, killzone_radius):
     # create directories to store data
     if not os.path.exists('data/'):

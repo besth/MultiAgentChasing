@@ -8,3 +8,4 @@ anytree
 sk-video
 ffmpeg
 click
+git+git://github.com/deepmind/dm_control.git
