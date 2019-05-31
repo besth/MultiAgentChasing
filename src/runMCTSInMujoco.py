@@ -113,7 +113,7 @@ def evaluate(cInit, cBase, numSimulations, maxRunningSteps, numTestingIterations
 
     # expand
     initializeChildren = InitializeChildren(actionSpace, transitionNoRender, getActionPrior)
-    expand = Expand(transitionNoRender, isTerminal, initializeChildren)
+    expand = Expand(isTerminal, initializeChildren)
 
     # Rollout
     useHeuristic = False

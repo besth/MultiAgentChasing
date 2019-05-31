@@ -47,8 +47,7 @@ class GetActionPrior:
 
 
 class Expand:
-    def __init__(self, transition_func, is_terminal, initializeChildren):
-        self.transition_func = transition_func
+    def __init__(self, is_terminal, initializeChildren):
         self.is_terminal = is_terminal
         self.initializeChildren = initializeChildren
 
