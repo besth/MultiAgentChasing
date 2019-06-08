@@ -1,0 +1,4 @@
+1) Remove the parameter 'useHeuristic'.
+2) Evaluate in runMCTSInMujoco uses a transition function even before MCTS starts. Fix that.
+3) Currently, the MCTS algorithm returns the next root instead of the next action. While it is okay in our scenario, it is not very consistent with the actual algorithm.
+4) The tests involving Mujoco aren't working from inside the tests folder. Maybe I'll have to add a sys_path or something like that.
