@@ -3,7 +3,6 @@ sys.path.append('..')
 import unittest
 import numpy as np
 from ddt import ddt, data, unpack
-from anytree import AnyNode as Node
 
 # Local import
 from envMujoco import Reset, TransitionFunction, IsTerminal

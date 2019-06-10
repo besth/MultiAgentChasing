@@ -30,7 +30,10 @@ class SelectChild:
 
     def __call__(self, currentNode):
         scores = [self.calculateScore(currentNode, child) for child in currentNode.children]
-        maxIndex = np.argwhere(scores == np.max(scores)).flatten()
+        try:
+            maxIndex = np.argwhere(scores == np.max(scores)).flatten()
+        except:
+            import ipdb; ipdb.set_trace()
         selectedChildIndex = np.random.choice(maxIndex)
         selectedChild = currentNode.children[selectedChildIndex]
         return selectedChild
@@ -43,6 +46,24 @@ class GetActionPrior:
     def __call__(self, currentState):
         actionPrior = {action: 1 / len(self.actionSpace) for action in self.actionSpace}
         return actionPrior
+
+
+class InitializeChildren:
+    def __init__(self, actionSpace, transition, getActionPrior):
+        self.actionSpace = actionSpace
+        self.transition = transition
+        self.getActionPrior = getActionPrior
+
+    def __call__(self, node):
+        state = list(node.id.values())[0]
+        initActionPrior = self.getActionPrior(state)
+
+        for action in self.actionSpace:
+            nextState = self.transition(state, action)
+            Node(parent=node, id={action: nextState}, numVisited=0, sumValue=0, actionPrior=initActionPrior[action],
+                 isExpanded=False)
+
+        return node
 
 
 class Expand:
@@ -75,14 +96,6 @@ class RolloutHeuristicBasedOnClosenessToTarget:
         reward = -self.weight * distance
 
         return reward
-
-
-class NullRolloutHeuristic:
-    def __init__(self):
-        pass
-
-    def __call__(self, state):
-        return 0
 
 
 class RollOut:
@@ -128,29 +141,14 @@ class SelectNextAction:
 
     def __call__(self, currentRoot):
         numVisitedForAllChildren = [child.numVisited for child in currentRoot.children]
-        maxIndex = np.argwhere(numVisitedForAllChildren == np.max(numVisitedForAllChildren)).flatten()
+        try:
+            maxIndex = np.argwhere(numVisitedForAllChildren == np.max(numVisitedForAllChildren)).flatten()
+        except:
+            import ipdb; ipdb.set_trace()
         selectedChildIndex = np.random.choice(maxIndex)
 
         action = list(currentRoot.children[selectedChildIndex].id.keys())[0]
         return action
-
-
-class InitializeChildren:
-    def __init__(self, actionSpace, transition, getActionPrior):
-        self.actionSpace = actionSpace
-        self.transition = transition
-        self.getActionPrior = getActionPrior
-
-    def __call__(self, node):
-        state = list(node.id.values())[0]
-        initActionPrior = self.getActionPrior(state)
-
-        for action in self.actionSpace:
-            nextState = self.transition(state, action)
-            Node(parent=node, id={action: nextState}, numVisited=0, sumValue=0, actionPrior=initActionPrior[action],
-                 isExpanded=False)
-
-        return node
 
 
 class MCTS:
@@ -163,12 +161,10 @@ class MCTS:
         self.selectNextAction = selectNextAction
 
     def __call__(self, currentState):
-        root = Node(id={None: currentState}, numVisited=0, sumValue=0, isExpanded=True)
+        root = Node(id={None: currentState}, numVisited=0, sumValue=0, isExpanded=False)
         root = self.expand(root)
 
         for exploreStep in range(self.numSimulation):
-            if exploreStep % 100 == 0:
-                print("simulation step:", exploreStep, "out of", self.numSimulation)
             currentNode = root
             nodePath = [currentNode]
 

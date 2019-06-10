@@ -17,5 +17,4 @@ class TestRunPolicyIn1DEnv(unittest.TestCase):
         meanEpisodeLength = evaluateMeanEpisodeLength(trajectory)
         self.assertEqual(meanEpisodeLength, groundTruthMeanEpisodeLength)
 
-    def testSampleTrajectory(self):
 

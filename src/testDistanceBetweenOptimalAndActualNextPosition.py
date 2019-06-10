@@ -3,11 +3,9 @@ sys.path.append('..')
 import unittest
 import numpy as np
 from ddt import ddt, data, unpack
-from anytree import AnyNode as Node
 
 # Local import
-from testMCTSMujocoVaryNumSim import computeDistance, DistanceBetweenActualAndOptimalNextPosition
-from envMujoco import TransitionFunction, IsTerminal, Reset
+from envSheepChaseWolf import computeDistance, DistanceBetweenActualAndOptimalNextPosition
 
 
 @ddt
