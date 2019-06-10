@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 class TransitionFunctionSheepSimulation:
@@ -44,6 +45,25 @@ def computeDistance(pos1, pos2):
     return distance
 
 
+# class DistanceBetweenActualAndOptimalNextPosition:
+#     def __init__(self, optimalNextPosition, nextPositionIndex, stateIndexInTuple, xPosIndex, numXPosEachAgent, agentID):
+#         self.optimalNextPosition = optimalNextPosition
+#         self.nextPositionIndex = nextPositionIndex
+#         self.stateIndexInTuple = stateIndexInTuple
+#         self.xPosIndex = xPosIndex
+#         self.numXPosEachAgent = numXPosEachAgent
+#         self.agentID = agentID
+#
+#     def __call__(self, trajectories):
+#         statesAtNextStep = [trajectory[self.nextPositionIndex][self.stateIndexInTuple] for trajectory in trajectories]
+#         xPosAtNextStep = [state[self.agentID][self.xPosIndex:self.xPosIndex+self.numXPosEachAgent] for state in statesAtNextStep]
+#         distanceForAllTrajectories = [computeDistance(nextPosition, self.optimalNextPosition) for nextPosition in xPosAtNextStep]
+#         meanDistance = np.mean(distanceForAllTrajectories)
+#         distanceStdDev = np.std(distanceForAllTrajectories)
+#
+#         return [meanDistance, distanceStdDev]
+
+
 class DistanceBetweenActualAndOptimalNextPosition:
     def __init__(self, optimalNextPosition, nextPositionIndex, stateIndexInTuple, xPosIndex, numXPosEachAgent, agentID):
         self.optimalNextPosition = optimalNextPosition
@@ -53,15 +73,11 @@ class DistanceBetweenActualAndOptimalNextPosition:
         self.numXPosEachAgent = numXPosEachAgent
         self.agentID = agentID
 
-    def __call__(self, trajectories):
-        statesAtNextStep = [trajectory[self.nextPositionIndex][self.stateIndexInTuple] for trajectory in trajectories]
-        xPosAtNextStep = [state[self.agentID][self.xPosIndex:self.xPosIndex+self.numXPosEachAgent] for state in statesAtNextStep]
-        distanceForAllTrajectories = [computeDistance(nextPosition, self.optimalNextPosition) for nextPosition in xPosAtNextStep]
-        meanDistance = np.mean(distanceForAllTrajectories)
-        distanceStdDev = np.std(distanceForAllTrajectories)
+    def __call__(self, trajectoryDf):
+        trajectory = trajectoryDf.values[0][0]
+        stateAtNextStep = trajectory[self.nextPositionIndex][self.stateIndexInTuple]
+        xPosAtNextStep = stateAtNextStep[self.agentID][self.xPosIndex:self.xPosIndex+self.numXPosEachAgent]
+        distance = computeDistance(self.optimalNextPosition, xPosAtNextStep)
+        distanceSeries = pd.Series({'distance': distance})
 
-        return [meanDistance, distanceStdDev]
-
-
-
-
+        return distanceSeries
