@@ -80,17 +80,15 @@ class Expand:
         return leafNode
 
 
-class RolloutHeuristicBasedOnClosenessToTarget:
-    def __init__(self, weight, sheepId, wolfId, xPosIndex, numXPosEachAgent):
+class HeuristicDistanceToTarget:
+    def __init__(self, weight, getTargetPosition, getCurrentPosition):
         self.weight = weight
-        self.sheepId = sheepId
-        self.wolfId = wolfId
-        self.xPosIndex = xPosIndex
-        self.numXPosEachAgent = numXPosEachAgent
+        self.getTargetPosition = getTargetPosition
+        self.getCurrentPosition = getCurrentPosition
 
     def __call__(self, state):
-        terminalPosition = state[self.wolfId][self.xPosIndex:self.xPosIndex+self.numXPosEachAgent]
-        currentPosition = state[self.sheepId][self.xPosIndex:self.xPosIndex+self.numXPosEachAgent]
+        terminalPosition = self.getTargetPosition(state)
+        currentPosition = self.getCurrentPosition(state)
 
         distance = np.sqrt(np.sum(np.square(currentPosition - terminalPosition)))
         reward = -self.weight * distance

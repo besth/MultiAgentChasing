@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="974851ba-58ab-4eb1-a161-8a2a3124d811" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chasingTargetSupervisedLearning" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=100|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=250|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=25|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=400|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=50|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=5|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=100|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=250|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=25|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=400|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=50|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=5|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=100|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=250|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=25|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=50|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=5|.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/measurements/testQEffectOnMCTSMujoco.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/statistics/testQEffectOnMCTSMujoco.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/testQEffectOnMCTSMujoco.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/trajectories/testQEffectOnMCTSMujoco.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testSheepFirstStepInEscape/testSheepFirstStepInEscape.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/testSheepFirstStepInEscape/trajectories/testSheepFirstStepEscape.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exec/testQEffectOnMCTSMujoco.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exec/testSheepFirstStepInEscape.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Figure_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Figure_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Figure_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/envSheepWolfMujoco/envMujoco.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/envSheepWolfMujoco/envSheepChaseWolf.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/envSheepWolfMujoco/reward.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/play.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/testMCTSInMujoco.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/algorithms/mcts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/mcts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim0_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim1000_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim100_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim1500_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim2000_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim250_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim500_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim50_vdis2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim100_dis3_killzone" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim10_dis3_killzone" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim1_dis3_killzone" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim2_dis3_killzone" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim3_dis3_killzone" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim50_dis3_killzone" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim5_dis3_killzone" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/distance_vs_numSum_nonuniformPrior.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/testPriorEffectOnMCTSMujoco/distance_vs_numSum_nonuniformPrior.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/effect_of_heuristic_on_MCTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/testHeuristicEffectOnMujoco/effect_of_heuristic_on_MCTS.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/effect_of_prior_on_MCTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/testPriorEffectOnMCTSMujoco/effect_of_prior_on_MCTS.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/envMujoco.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/envMujoco.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/envSheepChaseWolf.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/envSheepChaseWolf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loadTrajectoryDataFrameAndPlot.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testEnvMujoco.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testEnvMujoco.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testEnvSheepChaseWolf.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testMCTSHeuristicEffectInMujoco.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testMCTSInMujoco.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testMCTSPriorEffectInMujoco.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testRunPolicyIn1DEnv.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testRunPolicyIn1DEnv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/test1DEnv.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test1DEnv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/testEnvMujoco.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/testMCTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testMCTS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim0UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim10UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim11UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim1UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim250UseHeuristicFalse.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim250UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim250UseHeuristicTrue.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim2UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim3UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim4UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim500UseHeuristicFalse.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim500UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim500UseHeuristicTrue.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim50UseHeuristicFalse.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim50UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim50UseHeuristicTrue.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim5UseHeuristicFalse.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim5UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim6UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim7UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim8UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim9UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/videos/config1_wolfAction1.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config1_wolfAction1.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/videos/config1_wolfAction5.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config1_wolfAction5.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/videos/config2_wolfAction1.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config2_wolfAction1.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/videos/config2_wolfAction5.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config2_wolfAction5.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/videos/config3_wolfAction1.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config3_wolfAction1.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/videos/config3_wolfAction5.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config3_wolfAction5.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/xmls/twoAgents.xml" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="MultiAgentChasing" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="testEnvMujoco.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/testEnvMujoco.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="405">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="envSheepChaseWolf.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/envSheepWolfMujoco/envSheepChaseWolf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-835">
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="testMCTSvsRandomInSheepEscape.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-431">
+              <caret line="115" column="46" lean-forward="true" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mcts.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/algorithms/mcts.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1688">
+              <caret line="164" column="53" selection-start-line="164" selection-start-column="53" selection-end-line="164" selection-end-column="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>'prior</find>
+      <find>sheep</find>
+      <find>sample</find>
+      <find>numSimulations</find>
+      <find>rolloutHeuristicWeight</find>
+      <find>maxRollou</find>
+      <find>perfor</find>
+      <find>maxRunn</find>
+      <find>initState</find>
+      <find>xPos</find>
+      <find>x</find>
+      <find>Q</find>
+      <find>rollout</find>
+      <find>pos</find>
+      <find>numTrials</find>
+      <find>maxRunnin</find>
+      <find>print</find>
+      <find>heuristic</find>
+      <find>numSim</find>
+      <find>numSimula</find>
+      <find>get</find>
+      <find>.</find>
+      <find>sheepPolicy</find>
+      <find>agg</find>
+      <find>trajec</find>
+      <find>pickle</find>
+      <find>draw</find>
+      <find>xmls</find>
+      <find>directory</find>
+      <find>groupby</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>action</replace>
+      <replace>evaluateEpisodeLength</replace>
+      <replace>rolloutHeuristic</replace>
+      <replace>numVisited</replace>
+      <replace>selfVisitCount</replace>
+      <replace>actionPrior</replace>
+      <replace>cBase</replace>
+      <replace>cInit</replace>
+      <replace>sumValue</replace>
+      <replace>uScore</replace>
+      <replace>explorationRate</replace>
+      <replace>calculateScore</replace>
+      <replace>currentState</replace>
+      <replace>isTerminal</replace>
+      <replace>leafNode</replace>
+      <replace>isExpanded</replace>
+      <replace>terminalPosition</replace>
+      <replace>useHeuristic</replace>
+      <replace>envAgentAction</replace>
+      <replace>state</replace>
+      <replace>Trials</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/runMCTS.py" />
+        <option value="$PROJECT_DIR$/src/generateBenchmark.py" />
+        <option value="$PROJECT_DIR$/requirements.txt" />
+        <option value="$PROJECT_DIR$/src/editModelInXML.py" />
+        <option value="$PROJECT_DIR$/src/nishad (need some work)/generateBenchmarkMCTSinMujoco.py" />
+        <option value="$PROJECT_DIR$/src/tests/testMCTSInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/nishad (need some work)/testMCTSInMujoco_OLD_VERSION.py" />
+        <option value="$PROJECT_DIR$/src/generateBenchmarkMCTSinMujoco.py" />
+        <option value="$PROJECT_DIR$/src/newXML.xml" />
+        <option value="$PROJECT_DIR$/src/nishad (need some work)/testMCTSInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/nishad (need some work)/plot.py" />
+        <option value="$PROJECT_DIR$/src/tests/testEnvMujoco.py" />
+        <option value="$PROJECT_DIR$/src/nishad (need some work)/todo.txt" />
+        <option value="$PROJECT_DIR$/src/testMCTSMultipleConfigurations.py" />
+        <option value="$PROJECT_DIR$/src/testMJCF.py" />
+        <option value="$PROJECT_DIR$/src/testMCTSMujocoVaryDistance.py" />
+        <option value="$PROJECT_DIR$/src/tests/testMCTS.py" />
+        <option value="$PROJECT_DIR$/src/runMCTSInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/testEvaluate.py" />
+        <option value="$PROJECT_DIR$/src/testRunPolicyInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/testOptimalDistanceCalculation.py" />
+        <option value="$PROJECT_DIR$/src/loadDataFrameAndPlot.py" />
+        <option value="$PROJECT_DIR$/src/testEnvMujoco.py" />
+        <option value="$PROJECT_DIR$/src/testRunPolicyIn1DEnv.py" />
+        <option value="$PROJECT_DIR$/src/runPolicyInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/readPickle.py" />
+        <option value="$PROJECT_DIR$/src/testMCTSMujocoVaryNumSim.py" />
+        <option value="$PROJECT_DIR$/src/testHeuristicEffectInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/loadTrajectoryDataFrameAndPlot.py" />
+        <option value="$PROJECT_DIR$/src/testMCTSPriorMujocoVaryNumSim.py" />
+        <option value="$PROJECT_DIR$/src/testPriorEffectInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/testMCTSInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/testDistanceBetweenOptimalAndActualNextPosition.py" />
+        <option value="$PROJECT_DIR$/src/testMCTSHeuristicEffectInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/testMCTSPriorEffectInMujoco.py" />
+        <option value="$PROJECT_DIR$/src/xmls/twoAgents.xml" />
+        <option value="$PROJECT_DIR$/src/testQEffectOnMCTSMujoco.py" />
+        <option value="$PROJECT_DIR$/src/play.py" />
+        <option value="$PROJECT_DIR$/src/algorithms/mcts.py" />
+        <option value="$PROJECT_DIR$/src/testSheepFirstStepInEscape.py" />
+        <option value="$PROJECT_DIR$/src/envSheepChaseWolf.py" />
+        <option value="$PROJECT_DIR$/src/testMCTSvsRandomInSheepEscape.py" />
+        <option value="$PROJECT_DIR$/tests/testEnvSheepChaseWolf.py" />
+        <option value="$PROJECT_DIR$/tests/testEnvMujoco.py" />
+        <option value="$PROJECT_DIR$/src/envMujoco.py" />
+        <option value="$PROJECT_DIR$/tests/testMCTSInMujoco.py" />
+        <option value="$PROJECT_DIR$/exec/test.py" />
+        <option value="$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="MultiAgentChasing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MultiAgentChasing" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/nishad (need some work)" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/exec" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/tests" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="974851ba-58ab-4eb1-a161-8a2a3124d811" name="Default" comment="" />
+      <created>1558825543009</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1558825543009</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.48062015" visible="true" weight="0.22621565" />
+      <window_info anchor="bottom" id="TODO" order="11" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="6" weight="0.32917705" />
+      <window_info anchor="bottom" id="Run" order="7" />
+      <window_info anchor="bottom" id="Version Control" order="4" weight="0.32917705" />
+      <window_info anchor="bottom" id="Python Console" order="1" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="2" sideWeight="0.51937985" visible="true" weight="0.34413967" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.4" />
+      <window_info id="Favorites" order="0" sideWeight="0.14684016" side_tool="true" weight="0.32980973" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="5" />
+      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Run" order="7" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.48062015" visible="true" weight="0.22621565" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="1" />
+      <window_info anchor="bottom" id="Message" order="5" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.51937985" visible="true" weight="0.34413967" />
+      <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="Version Control" order="4" weight="0.32917705" />
+      <window_info anchor="bottom" id="Find" order="6" weight="0.32917705" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info id="Favorites" order="0" sideWeight="0.14684016" side_tool="true" weight="0.32980973" />
+    </layout-to-restore>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/algorithms/offlineA2CMonteCarloAdvantageDiscrete.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="32" column="42" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simple1DEnv.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tests/testMCTS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1249">
+          <caret line="1" column="21" lean-forward="true" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tests/testEnvMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="3" lean-forward="true" selection-start-column="3" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tests/test1DEnv.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/trajectories/trajectoriesNumSimulations2.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharmCE2018.1/python_stubs/-1462136586/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="5375" column="8" selection-start-line="5375" selection-start-column="8" selection-end-line="5375" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testMCTSHeuristicVaryDistance.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="10" column="49" lean-forward="true" selection-start-line="10" selection-start-column="49" selection-end-line="10" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/trajectories/NumSim50UseHeuristicFalse.pickle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/trajectories/NumSim10UseHeuristicFalsePriornonUniform.pickle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/readPickle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="38" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testMCTSMujocoVaryNumSim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="6" selection-end-line="9" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/visualize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-14">
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/loadTrajectoryDataFrameAndPlot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="36" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testMCTSPriorMujocoVaryNumSim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" lean-forward="true" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/runMCTS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1245">
+          <caret line="97" column="13" selection-start-line="97" selection-start-column="13" selection-end-line="97" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/plot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1390">
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/evaluate.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/env.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-115">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testRunPolicyIn1DEnv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="14" lean-forward="true" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testEnvSheepChaseWolf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/distance_vs_numSum_nonuniformPrior.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/effect_of_heuristic_on_MCTS.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testEnvMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testMCTSInMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/temp.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/effect_of_prior_on_MCTS.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dataTools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="17" column="65" lean-forward="true" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="65" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/xmls/twoAgents.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="43" lean-forward="true" selection-start-line="9" selection-start-column="43" selection-end-line="9" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/pandas/core/groupby/ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="189" selection-start-line="189" selection-end-line="189" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/trajectories/testMCTSvsRandomInSheepEscape.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testQEffectOnMCTSMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2975">
+          <caret line="175" column="22" lean-forward="true" selection-start-line="175" selection-start-column="22" selection-end-line="175" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/play.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testSheepFirstStepInEscape.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testQEffectOnMCTSMujoco.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testSheepFirstStepInEscape.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1733">
+          <caret line="27" column="52" selection-start-line="27" selection-start-column="52" selection-end-line="27" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testMCTSPriorEffectInMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4642">
+          <caret line="347" selection-start-line="347" selection-end-line="347" />
+          <folding>
+            <element signature="e#13316#13334#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testMCTSvsRandomInSheepEscape.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3060">
+          <caret line="204" column="112" selection-start-line="204" selection-start-column="112" selection-end-line="204" selection-end-column="112" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/testMCTSHeuristicEffectInMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2177">
+          <caret line="26" selection-start-line="21" selection-end-line="26" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testEnvSheepChaseWolf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="41" column="8" selection-start-line="41" selection-start-column="8" selection-end-line="41" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/exec/twoAgents.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/envMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-214">
+          <caret line="34" column="52" selection-start-line="34" selection-start-column="52" selection-end-line="34" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/envSheepChaseWolf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="74" column="57" lean-forward="true" selection-start-line="74" selection-start-column="23" selection-end-line="74" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testMCTSInMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="28" column="51" selection-start-line="28" selection-start-column="51" selection-end-line="28" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testEnvMujoco.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/envSheepWolfMujoco/envSheepChaseWolf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-835">
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/algorithms/mcts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1688">
+          <caret line="164" column="53" selection-start-line="164" selection-start-column="53" selection-end-line="164" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/exec/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-431">
+          <caret line="115" column="46" lean-forward="true" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
