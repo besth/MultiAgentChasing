@@ -2,103 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="974851ba-58ab-4eb1-a161-8a2a3124d811" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chasingTargetSupervisedLearning" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=100|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=250|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=25|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=400|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=50|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=mcts|numSimulations=5|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=100|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=250|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=25|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=400|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=50|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(0,3_0_-0,3_0)|sheepPolicyName=random|numSimulations=5|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=100|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=250|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=25|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=50|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testMCTSvsRandomInSheepEscape/trajectories/qPosInit=(9,75_0_9,15_0)|sheepPolicyName=mcts|numSimulations=5|.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/measurements/testQEffectOnMCTSMujoco.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/statistics/testQEffectOnMCTSMujoco.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/testQEffectOnMCTSMujoco.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testQEffectOnMCTSMujoco/trajectories/testQEffectOnMCTSMujoco.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testSheepFirstStepInEscape/testSheepFirstStepInEscape.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testSheepFirstStepInEscape/trajectories/testSheepFirstStepEscape.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/exec/testQEffectOnMCTSMujoco.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/exec/testSheepFirstStepInEscape.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Figure_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Figure_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Figure_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/envSheepWolfMujoco/envMujoco.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/envSheepWolfMujoco/envSheepChaseWolf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/envSheepWolfMujoco/reward.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/play.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/testMCTSInMujoco.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/algorithms/mcts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithms/mcts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim0_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim1000_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim100_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim1500_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim2000_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim250_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim500_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/action_distribution_sim50_vdis2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim100_dis3_killzone" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim10_dis3_killzone" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim1_dis3_killzone" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim2_dis3_killzone" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim3_dis3_killzone" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim50_dis3_killzone" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/corner_mean_episode_length_mcts_sim5_dis3_killzone" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/distance_vs_numSum_nonuniformPrior.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/testPriorEffectOnMCTSMujoco/distance_vs_numSum_nonuniformPrior.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/effect_of_heuristic_on_MCTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/testHeuristicEffectOnMujoco/effect_of_heuristic_on_MCTS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/effect_of_prior_on_MCTS.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/testPriorEffectOnMCTSMujoco/effect_of_prior_on_MCTS.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/envMujoco.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/envMujoco.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/envSheepChaseWolf.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/envSheepChaseWolf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/loadTrajectoryDataFrameAndPlot.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testEnvMujoco.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testEnvMujoco.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testEnvSheepChaseWolf.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testMCTSHeuristicEffectInMujoco.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testMCTSInMujoco.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testMCTSPriorEffectInMujoco.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testRunPolicyIn1DEnv.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testRunPolicyIn1DEnv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/test1DEnv.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test1DEnv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/testEnvMujoco.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/testMCTS.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testMCTS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim0UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim10UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim11UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim1UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim250UseHeuristicFalse.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim250UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim250UseHeuristicTrue.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim2UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim3UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim4UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim500UseHeuristicFalse.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim500UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim500UseHeuristicTrue.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim50UseHeuristicFalse.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim50UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim50UseHeuristicTrue.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim5UseHeuristicFalse.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim5UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim6UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim7UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim8UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trajectories/NumSim9UseHeuristicFalsePriornonUniform.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/videos/config1_wolfAction1.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config1_wolfAction1.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/videos/config1_wolfAction5.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config1_wolfAction5.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/videos/config2_wolfAction1.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config2_wolfAction1.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/videos/config2_wolfAction5.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config2_wolfAction5.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/videos/config3_wolfAction1.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config3_wolfAction1.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/videos/config3_wolfAction5.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/videos/config3_wolfAction5.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/xmls/twoAgents.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -132,11 +36,64 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="testMCTSvsRandomInSheepEscape.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="testMCTSvsRandomInSheepEscape.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-431">
-              <caret line="115" column="46" lean-forward="true" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+            <state relative-caret-position="-1872">
+              <caret line="115" column="46" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mainNeuralNet.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/neuralNetwork/mainNeuralNet.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="488">
+              <caret line="39" column="57" selection-start-line="39" selection-start-column="57" selection-end-line="39" selection-end-column="57" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="prepareNeuralNetData.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/neuralNetwork/prepareNeuralNetData.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="neuralNetwork.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/neuralNetwork/neuralNetwork.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-98">
+              <caret column="23" selection-start-column="23" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="supervisedLearning.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/neuralNetwork/supervisedLearning.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="61" column="61" selection-start-line="61" selection-start-column="61" selection-end-line="61" selection-end-column="61" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="continuousEnv.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/neuralNetwork/toSeparateFiles/continuousEnv.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1531">
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -270,6 +227,8 @@
         <option value="$PROJECT_DIR$/tests/testMCTSInMujoco.py" />
         <option value="$PROJECT_DIR$/exec/test.py" />
         <option value="$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py" />
+        <option value="$PROJECT_DIR$/src/neuralNetwork/mainContinuous.py" />
+        <option value="$PROJECT_DIR$/src/neuralNetwork/prepareNeuralNetData.py" />
       </list>
     </option>
   </component>
@@ -289,6 +248,24 @@
               <item name="MultiAgentChasing" type="b2602c69:ProjectViewProjectNode" />
               <item name="MultiAgentChasing" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="MultiAgentChasing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MultiAgentChasing" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MultiAgentChasing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MultiAgentChasing" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="neuralNetwork" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MultiAgentChasing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MultiAgentChasing" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="neuralNetwork" type="462c0819:PsiDirectoryNode" />
+              <item name="toSeparateFiles" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -305,6 +282,7 @@
       <recent name="$PROJECT_DIR$/src/nishad (need some work)" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/neuralNetwork" />
       <recent name="$PROJECT_DIR$/exec" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/tests" />
@@ -337,6 +315,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.48062015" visible="true" weight="0.22621565" />
       <window_info anchor="bottom" id="TODO" order="11" />
@@ -390,36 +369,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/algorithms/offlineA2CMonteCarloAdvantageDiscrete.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="32" column="42" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simple1DEnv.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tests/testMCTS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1249">
-          <caret line="1" column="21" lean-forward="true" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tests/testEnvMujoco.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="3" lean-forward="true" selection-start-column="3" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tests/test1DEnv.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/trajectories/trajectoriesNumSimulations2.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -696,15 +645,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/envSheepWolfMujoco/envSheepChaseWolf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-835">
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/algorithms/mcts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1688">
@@ -719,10 +659,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/neuralNetwork/toSeparateFiles/continuousEnv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1531">
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/exec/testMCTSvsRandomInSheepEscape.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-431">
-          <caret line="115" column="46" lean-forward="true" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+        <state relative-caret-position="-1872">
+          <caret line="115" column="46" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/neuralNetwork/neuralNetwork.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-98">
+          <caret column="23" selection-start-column="23" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/neuralNetwork/prepareNeuralNetData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/neuralNetwork/mainNeuralNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="488">
+          <caret line="39" column="57" selection-start-line="39" selection-start-column="57" selection-end-line="39" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/envSheepWolfMujoco/envSheepChaseWolf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-835">
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/neuralNetwork/supervisedLearning.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="61" column="61" selection-start-line="61" selection-start-column="61" selection-end-line="61" selection-end-column="61" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
